@@ -5,6 +5,7 @@
 .env
 .txt
 *.txt
+*.TXT
 .md
 # testing
 /coverage
