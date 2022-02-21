@@ -5,12 +5,7 @@ export const tareasAPI = {
     return { headers: { auth: token } };
   },
   fetchTareasTodas: async (token) => {
-    let response = await fetch(url, tareasAPI.config(token));
-    if (!response.ok) {
-      throw Error("Hubo un error en la conexión.");
-      /*-----VER GRAY----------------*/
-    }
-    let data = await response.json();
+    let { data } = await axios.get(url, tareasAPI.config(token));
     return data.map((item) => {
       return {
         id: item._id,

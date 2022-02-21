@@ -38,9 +38,11 @@ export const TodoForm = () => {
       }
       try {
         const data = await tareasAPI.fetchTareasTodas(token);
+
         setTareas(data);
         setError([]);
       } catch (error) {
+        console.log(error, "ERROR FETCH");
         if (error.message === "Failed to fetch") {
           return setError(["Hubo un problema en la conexión."]);
         }
