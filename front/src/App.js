@@ -2,17 +2,16 @@ import "./App.css";
 import { Routes, Route } from "react-router-dom";
 
 /*-----------PAGES**********************/
-
 import { Register } from "./pages/Register";
 import { Main } from "./pages/Main";
-import { PersistAuth } from "./components/PersistLogin";
+import { PersistLogin } from "./components/PersistLogin";
 
 function App() {
   return (
     <div className="App">
       <div className="container">
         <Routes>
-          <Route element={<PersistAuth />}>
+          <Route element={<PersistLogin />}>
             <Route path="/" element={<Main />}></Route>
           </Route>
           <Route path="/register" element={<Register />}></Route>

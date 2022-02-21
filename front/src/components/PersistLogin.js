@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 
-export const PersistAuth = () => {
+export const PersistLogin = () => {
   const [loading, setLoading] = useState(true);
   console.log("estamos en persist");
   useEffect(() => {
