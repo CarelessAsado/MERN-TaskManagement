@@ -5,14 +5,14 @@ import { Routes, Route } from "react-router-dom";
 
 import { Register } from "./pages/Register";
 import { Main } from "./pages/Main";
-import { CheckAuth } from "./components/CheckAuth";
+import { PersistAuth } from "./components/PersistLogin";
 
 function App() {
   return (
     <div className="App">
       <div className="container">
         <Routes>
-          <Route element={CheckAuth}>
+          <Route element={<PersistAuth />}>
             <Route path="/" element={<Main />}></Route>
           </Route>
           <Route path="/register" element={<Register />}></Route>
