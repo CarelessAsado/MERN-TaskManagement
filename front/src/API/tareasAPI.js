@@ -1,38 +1,79 @@
 import axios from "./url";
+import { actions } from "../Context/reducer";
 const url = "tareas";
 export const tareasAPI = {
   config: (token) => {
     return { headers: { auth: token } };
   },
-  fetchTareasTodas: async (token) => {
-    let { data } = await axios.get(url, tareasAPI.config(token));
-    return data.map((item) => {
-      return {
-        id: item._id,
-        descripcion: item.descripcion,
-        completada: item.completada,
-      };
-    });
-  },
-  borrarTarea: async (id, token) => {
-    const { data } = axios.delete(url + `/${id}`, tareasAPI.config(token));
-    return data;
-  },
-  guardarTareaPost: async ({ descripcion }, token) => {
-    const { data } = await axios.post(
-      url,
-      { descripcion },
-      tareasAPI.config(token)
+  logErrorAPI: function (error, dispatch, etapa) {
+    console.log(
+      error,
+      "hubo un error estamos el logERROR API. Sector: " + etapa
     );
-    return data;
+    if (
+      error.message === "Network Error" ||
+      error.message === "Failed to fetch"
+    ) {
+      return dispatch({
+        type: actions.FAILURE_ACTION,
+        payload: "Hubo un problema en la conexión.",
+      });
+    }
+    dispatch({ type: actions.FAILURE_ACTION, payload: error.response.data });
   },
-  actualizarTarea: async (id, itemAActualizar, token) => {
-    let { data } = await axios.patch(
-      url + `/${id}`,
+  fetchTareasTodas: async function (dispatch, token) {
+    try {
+      let { data } = await axios.get(url, tareasAPI.config(token));
+      let dataPayload = data.map((item) => {
+        return {
+          id: item._id,
+          descripcion: item.descripcion,
+          completada: item.completada,
+        };
+      });
+      dispatch({ type: actions.FETCH, payload: dataPayload });
+      return dataPayload;
+    } catch (error) {
+      this.logErrorAPI(error, dispatch, "FETCH ALL TASKS");
+    }
+  },
+  /*---------------------------------DELETEEEEE--------------*/
+  borrarTarea: async function (id, dispatch, token) {
+    try {
+      dispatch({ type: actions.START_ACTION });
+      await axios.delete(url + `/${id}`, tareasAPI.config(token));
+      dispatch({ type: actions.REMOVE, payload: id });
+      return;
+    } catch (error) {
+      this.logErrorAPI(error, dispatch, "BORRAR TAREA");
+    }
+  },
+  guardarTareaPost: async function (input, dispatch, token) {
+    try {
+      dispatch({ type: actions.START_ACTION });
+      const {
+        data: { _id: id, descripcion, completada },
+      } = await axios.post(url, input, tareasAPI.config(token));
+      dispatch({ type: actions.ADD, payload: { id, descripcion, completada } });
+      return;
+    } catch (error) {
+      this.logErrorAPI(error, dispatch, "GUARDAR TAREA");
+    }
+  },
+  actualizarTarea: async function (id, itemAActualizar, dispatch, token) {
+    dispatch({ type: actions.START_ACTION });
+    try {
+      let { data } = await axios.patch(
+        url + `/${id}`,
 
-      itemAActualizar,
-      tareasAPI.config(token)
-    );
-    return data;
+        itemAActualizar,
+        tareasAPI.config(token)
+      );
+      console.log(data, "ver si esta el objeto");
+      dispatch({ type: actions.UPDATE, payload: { ...itemAActualizar, id } });
+      return;
+    } catch (error) {
+      this.logErrorAPI(error, dispatch, "ACTUALIZAR");
+    }
   },
 };

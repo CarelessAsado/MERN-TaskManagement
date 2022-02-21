@@ -1,18 +1,34 @@
 import React, { useState, useRef } from "react";
+import { tareasAPI } from "../API/tareasAPI";
+import { useGlobalContext } from "../Hooks/useGlobalContext";
 
 export const TodoItem = ({
   tarea,
-  deleteTarea,
-  changeCompletada,
   beginUpdateDescripcion,
   finishUpdateDescripcion,
 }) => {
   const [inputTarea, setInputTarea] = useState(tarea.descripcion);
   const [isEditing, setIsEditing] = useState(false);
+  const { dispatch, tasks } = useGlobalContext();
   /*-----------------------*/
   const inputAModificar = useRef();
   /*------------------------------------*/
-
+  const token = JSON.parse(localStorage.getItem("token"));
+  async function deleteTarea(id) {
+    tareasAPI.borrarTarea(id, dispatch, token);
+  }
+  async function changeCompletada(id) {
+    let { descripcion, completada } = tasks.find((item) => item.id === id);
+    tareasAPI.actualizarTarea(
+      id,
+      {
+        descripcion,
+        completada: !completada,
+      },
+      dispatch,
+      token
+    );
+  }
   return (
     <div className="tareaItem ">
       <input

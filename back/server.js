@@ -28,5 +28,4 @@ const verifyToken = require("./middleware/authJWT");
 app.use(verifyToken);
 
 const tareasAPI = require("./routes/tareasAPI");
-
 app.use("/api/tareas", tareasAPI);

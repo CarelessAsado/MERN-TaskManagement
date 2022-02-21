@@ -38,16 +38,16 @@ async function getAllTareas(req, res) {
 async function borrarTarea(req, res) {
   const { id } = req.params;
   try {
-    const user = await User.findOne({ "tareas._id": req.params.id });
+    const user = await User.findOne({ "tareas._id": id });
     if (user._id != req.user) {
       return res.status(403).json("No estás autorizado.");
     }
     let tareasAGuardar = user.tareas.filter((item) => item._id != id);
     user.tareas = tareasAGuardar;
     await user.save();
-    res.status(200);
+    return res.sendStatus(200);
   } catch (error) {
-    console.log(error);
+    console.log(error.message, "holaaa");
     res.status(500).json(error);
   }
 }
@@ -72,7 +72,7 @@ async function actualizarTarea(req, res) {
     });
     user.tareas = tareasUpdated;
     await user.save();
-    res.status(200).end();
+    res.status(200).json(tareaUpdated);
   } catch (error) {
     res.status(500).json(error);
   }
