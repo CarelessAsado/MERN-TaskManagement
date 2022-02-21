@@ -1,8 +1,6 @@
 import axios from "axios";
 
-const url = process.env.NODE
-  ? "https://react-todolist-authentication.herokuapp.com/api/"
-  : "http://localhost:5000/api/";
+const url = "https://react-task-management.herokuapp.com/api/";
 
 export default axios.create({
   baseURL: url,
