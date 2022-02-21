@@ -47,7 +47,6 @@ async function borrarTarea(req, res) {
     await user.save();
     return res.sendStatus(200);
   } catch (error) {
-    console.log(error.message, "holaaa");
     res.status(500).json(error);
   }
 }
@@ -60,17 +59,13 @@ async function actualizarTarea(req, res) {
     if (user._id != req.user) {
       return res.status(403).json("No estás autorizado.");
     }
-    let tareasUpdated = user.tareas.map((item) => {
+    user.tareas.forEach((item) => {
       if (item._id == id) {
         for (let key in req.body) {
           item[key] = req.body[key];
         }
-        tareaUpdated = item;
-        return tareaUpdated;
       }
-      return item;
     });
-    user.tareas = tareasUpdated;
     await user.save();
     res.status(200).json(tareaUpdated);
   } catch (error) {
