@@ -2,7 +2,7 @@ import React, { useReducer } from "react";
 import { reducerTasksUser } from "./reducer";
 
 export const AppContext = React.createContext({});
-const initialState = { user: null, tasks: [], error: false };
+const initialState = { user: null, tasks: [], error: false, loading: false };
 export const ContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducerTasksUser, initialState);
   return (

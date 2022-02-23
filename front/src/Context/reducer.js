@@ -11,8 +11,13 @@ export const actions = {
   VALIDATION_ERROR: "VALIDATION_ERROR",
   CLEAR_ERRORS: "CLEAR_ERRORS",
 };
+
 export function reducerTasksUser(state, action) {
-  const copia = [...state.tasks];
+  let copia = [];
+  if (state.tasks) {
+    copia = [...state.tasks];
+  }
+
   console.log(state, "VER STATE", action, "USE REDUCER");
   switch (action.type) {
     /*------------------ERRORS-----------------*/

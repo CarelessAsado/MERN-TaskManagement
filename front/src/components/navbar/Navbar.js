@@ -31,8 +31,12 @@ const Navbar = () => {
       </div>
       {/* add the active class to show or not the nav links */}
       <ul className={showMenu ? "" : "active"}>
-        {user
-          ? MenuList.hayUser.map((item, index) => {
+        {user ? (
+          <>
+            <li>
+              <Link to={`/profile/${user._id}`}>Usuario</Link>
+            </li>
+            {MenuList.hayUser.map((item, index) => {
               return (
                 <li key={index}>
                   <Link
@@ -46,14 +50,17 @@ const Navbar = () => {
                   </Link>
                 </li>
               );
-            })
-          : MenuList.noHayUser.map((item, index) => {
-              return (
-                <li key={index}>
-                  <Link to={`${item.url}`}> {item.title}</Link>
-                </li>
-              );
             })}
+          </>
+        ) : (
+          MenuList.noHayUser.map((item, index) => {
+            return (
+              <li key={index}>
+                <Link to={`${item.url}`}> {item.title}</Link>
+              </li>
+            );
+          })
+        )}
       </ul>
     </nav>
   );

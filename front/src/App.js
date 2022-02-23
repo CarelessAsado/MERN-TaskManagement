@@ -4,6 +4,7 @@ import { Routes, Route } from "react-router-dom";
 /*-----------PAGES**********************/
 import { RegisterOrLogin } from "./pages/Register";
 import { Main } from "./pages/Main";
+import { UserProfile } from "./pages/UserProfile";
 /*----------JWT RELATED-----------------*/
 import { PersistLogin } from "./components/PersistLogin";
 import { ProtectedByAuth } from "./components/ProtectedByAuth";
@@ -16,6 +17,7 @@ function App() {
           <Route element={<PersistLogin />}>
             <Route element={<ProtectedByAuth />}>
               <Route path="/" element={<Main />}></Route>
+              <Route path="/profile/:userId" element={<UserProfile />}></Route>
             </Route>
           </Route>
           <Route path="/register" element={<RegisterOrLogin />}></Route>
