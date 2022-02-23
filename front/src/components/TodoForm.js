@@ -69,49 +69,6 @@ export const TodoForm = () => {
     );
     setInputNuevaTarea("");
   }
-
-  async function finishUpdateDescripcion(
-    id,
-    setIsEditing,
-    inputAModificar,
-    inputTarea,
-    descripcionOriginal,
-    setInputTarea
-  ) {
-    if (!inputTarea) {
-      return dispatch({
-        type: actions.VALIDATION_ERROR,
-        payload: "No puede haber campos vacíos",
-      });
-    }
-    if (inputTarea.trim() === descripcionOriginal) {
-      setInputTarea(descripcionOriginal);
-      return;
-    }
-    try {
-      let { completada } = tasks.find((item) => item.id === id);
-      await tareasAPI.actualizarTarea(
-        id,
-        {
-          descripcion: inputTarea,
-          completada,
-        },
-        dispatch,
-        token
-      );
-
-      inputAModificar.current.setAttribute("readonly", true);
-      setIsEditing(false);
-    } catch (error) {
-      /*      if (error.message === "Network Error") {
-        setInputTarea(descripcionOriginal);
-        setIsEditing(false);
-        return setError(["Hubo un problema en la conexión."]);
-      }
-      setError([error.response.data]); */
-    }
-  }
-
   return (
     <section className="main">
       {error && (
@@ -155,11 +112,7 @@ export const TodoForm = () => {
           <h4>No hay tareas para mostrar.</h4>
         ) : (
           filteredTodos?.map((item) => (
-            <TodoItem
-              key={item.id}
-              tarea={item}
-              finishUpdateDescripcion={finishUpdateDescripcion}
-            ></TodoItem>
+            <TodoItem key={item.id} tarea={item}></TodoItem>
           ))
         )}
       </section>

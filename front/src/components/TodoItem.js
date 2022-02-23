@@ -1,8 +1,9 @@
 import React, { useState, useRef } from "react";
 import { tareasAPI } from "../API/tareasAPI";
+import { actions } from "../Context/reducer";
 import { useGlobalContext } from "../Hooks/useGlobalContext";
 
-export const TodoItem = ({ tarea, finishUpdateDescripcion }) => {
+export const TodoItem = ({ tarea }) => {
   const [inputTarea, setInputTarea] = useState(tarea.descripcion);
   const [isEditing, setIsEditing] = useState(false);
   const { dispatch, tasks } = useGlobalContext();
@@ -32,6 +33,40 @@ export const TodoItem = ({ tarea, finishUpdateDescripcion }) => {
     inputAModificar.current.removeAttribute("readonly");
   }
   /*-----------------------------------------------*/
+  async function finishUpdateDescripcion(id, descripcionOriginal) {
+    if (!inputTarea) {
+      return dispatch({
+        type: actions.VALIDATION_ERROR,
+        payload: "No puede haber campos vacíos",
+      });
+    }
+    if (inputTarea.trim() === descripcionOriginal) {
+      setInputTarea(descripcionOriginal);
+      return;
+    }
+    try {
+      let { completada } = tasks.find((item) => item.id === id);
+      await tareasAPI.actualizarTarea(
+        id,
+        {
+          descripcion: inputTarea,
+          completada,
+        },
+        dispatch,
+        token
+      );
+
+      inputAModificar.current.setAttribute("readonly", true);
+      setIsEditing(false);
+    } catch (error) {
+      /*      if (error.message === "Network Error") {
+        setInputTarea(descripcionOriginal);
+        setIsEditing(false);
+        return setError(["Hubo un problema en la conexión."]);
+      }
+      setError([error.response.data]); */
+    }
+  }
   return (
     <div className="tareaItem ">
       <input
@@ -54,14 +89,7 @@ export const TodoItem = ({ tarea, finishUpdateDescripcion }) => {
           <i
             className="far fa-save"
             onClick={() => {
-              finishUpdateDescripcion(
-                tarea.id,
-                setIsEditing,
-                inputAModificar,
-                inputTarea,
-                tarea.descripcion,
-                setInputTarea
-              );
+              finishUpdateDescripcion(tarea.id, tarea.descripcion);
             }}
           ></i>
         ) : (
