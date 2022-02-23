@@ -2,11 +2,7 @@ import React, { useState, useRef } from "react";
 import { tareasAPI } from "../API/tareasAPI";
 import { useGlobalContext } from "../Hooks/useGlobalContext";
 
-export const TodoItem = ({
-  tarea,
-  beginUpdateDescripcion,
-  finishUpdateDescripcion,
-}) => {
+export const TodoItem = ({ tarea, finishUpdateDescripcion }) => {
   const [inputTarea, setInputTarea] = useState(tarea.descripcion);
   const [isEditing, setIsEditing] = useState(false);
   const { dispatch, tasks } = useGlobalContext();
@@ -29,6 +25,13 @@ export const TodoItem = ({
       token
     );
   }
+  /*-------------------BEGIN UPDATE DESCRIPCION-----------*/
+  function beginUpdateDescripcion() {
+    setIsEditing(true);
+    inputAModificar.current.focus();
+    inputAModificar.current.removeAttribute("readonly");
+  }
+  /*-----------------------------------------------*/
   return (
     <div className="tareaItem ">
       <input
@@ -62,12 +65,7 @@ export const TodoItem = ({
             }}
           ></i>
         ) : (
-          <i
-            className="fas fa-pen"
-            onClick={() =>
-              beginUpdateDescripcion(inputAModificar, setIsEditing)
-            }
-          ></i>
+          <i className="fas fa-pen" onClick={beginUpdateDescripcion}></i>
         )}
 
         <i

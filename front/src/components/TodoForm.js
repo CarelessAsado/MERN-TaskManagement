@@ -70,11 +70,6 @@ export const TodoForm = () => {
     setInputNuevaTarea("");
   }
 
-  function beginUpdateDescripcion(inputAModificar, setIsEditing) {
-    setIsEditing(true);
-    inputAModificar.current.focus();
-    inputAModificar.current.removeAttribute("readonly");
-  }
   async function finishUpdateDescripcion(
     id,
     setIsEditing,
@@ -163,9 +158,7 @@ export const TodoForm = () => {
             <TodoItem
               key={item.id}
               tarea={item}
-              beginUpdateDescripcion={beginUpdateDescripcion}
               finishUpdateDescripcion={finishUpdateDescripcion}
-              tareas={tareas}
             ></TodoItem>
           ))
         )}
