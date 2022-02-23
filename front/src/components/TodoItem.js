@@ -11,10 +11,10 @@ export const TodoItem = ({ tarea }) => {
   const inputAModificar = useRef();
   /*------------------------------------*/
   const token = JSON.parse(localStorage.getItem("token"));
-  async function deleteTarea(id) {
+  function deleteTarea(id) {
     tareasAPI.borrarTarea(id, dispatch, token);
   }
-  async function changeCompletada(id) {
+  function changeCompletada(id) {
     let { descripcion, completada } = tasks.find((item) => item.id === id);
     tareasAPI.actualizarTarea(
       id,
@@ -32,7 +32,7 @@ export const TodoItem = ({ tarea }) => {
     inputAModificar.current.focus();
   }
   /*-------------------FINISH UPDATE----------------------------*/
-  async function finishUpdateDescripcion(id, descripcionOriginal) {
+  function finishUpdateDescripcion(id, descripcionOriginal) {
     setIsEditing(false);
     if (!inputTarea) {
       setInputTarea(descripcionOriginal);
