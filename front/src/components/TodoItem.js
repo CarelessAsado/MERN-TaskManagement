@@ -30,9 +30,8 @@ export const TodoItem = ({ tarea }) => {
   function beginUpdateDescripcion() {
     setIsEditing(true);
     inputAModificar.current.focus();
-    /* inputAModificar.current.removeAttribute("readonly"); */
   }
-  /*-----------------------------------------------*/
+  /*-------------------FINISH UPDATE----------------------------*/
   async function finishUpdateDescripcion(id, descripcionOriginal) {
     setIsEditing(false);
     if (!inputTarea) {
@@ -46,27 +45,16 @@ export const TodoItem = ({ tarea }) => {
       setInputTarea(descripcionOriginal);
       return;
     }
-    try {
-      let { completada } = tasks.find((item) => item.id === id);
-      await tareasAPI.actualizarTarea(
-        id,
-        {
-          descripcion: inputTarea,
-          completada,
-        },
-        dispatch,
-        token
-      );
-
-      /*  inputAModificar.current.setAttribute("readonly", true); */
-    } catch (error) {
-      /*      if (error.message === "Network Error") {
-        setInputTarea(descripcionOriginal);
-        setIsEditing(false);
-        return setError(["Hubo un problema en la conexión."]);
-      }
-      setError([error.response.data]); */
-    }
+    let { completada } = tasks.find((item) => item.id === id);
+    tareasAPI.actualizarTarea(
+      id,
+      {
+        descripcion: inputTarea,
+        completada,
+      },
+      dispatch,
+      token
+    );
   }
   return (
     <div className="tareaItem ">
