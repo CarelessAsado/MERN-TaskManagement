@@ -33,3 +33,24 @@ export const logout = async (dispatch, navigate) => {
   console.log("Navegando hacia el espacio");
   navigate("login");
 };
+
+/*---------------------FORGOT PASSWORD-----------------------*/
+export const forgotPasswordSendMeAnEmail = async (
+  e,
+  emailUsuario,
+  dispatch
+) => {
+  e.preventDefault();
+  try {
+    await axiosPRELogin.post(url + "/forgot-password", { emailUsuario });
+    /*     setSuccess("Te registraste exitosamente. Podés iniciar sesión.");
+    navigate("/login"); */
+    return;
+  } catch (error) {
+    tareasAPI.logErrorAPI(
+      error,
+      dispatch,
+      "FORGOT PASSWORD SEND ME AN EMAIL PROCESS"
+    );
+  }
+};

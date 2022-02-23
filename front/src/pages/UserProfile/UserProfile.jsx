@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import "./UserProfile.css";
-import axios from "../../API/url";
 import { ChangePWD } from "../../components/ChangePWD";
 import { useGlobalContext } from "../../Hooks/useGlobalContext";
 import { userProfileAPI } from "../../API/userProfileAPI";

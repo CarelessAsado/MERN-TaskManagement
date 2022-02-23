@@ -137,6 +137,11 @@ export const RegisterOrLogin = () => {
             : "Crear cuenta nueva"}
         </button>
       </Link>
+      {window.location.pathname === "/login" && (
+        <Link to="/forgot-password">
+          <div>Me olvidé la contraseña</div>
+        </Link>
+      )}
     </form>
   );
 };

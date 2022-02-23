@@ -75,4 +75,34 @@ async function loginUsuario(req, res) {
     res.status(500).json(error.message);
   }
 }
-module.exports = { registerUsuario, loginUsuario };
+/*-----------------------------------------FORGOT PASSWORD----------------------*/
+/*----SEND ME AN EMAIL*/
+async function forgotPassword(req, res) {
+  const { emailUsuario } = req.body;
+  if (!emailUsuario) {
+    return res.status(400).json("No puede haber campos vacíos");
+  }
+  try {
+    let user = await User.findOne({ emailUsuario });
+
+    if (!user) {
+      return res
+        .status(401)
+        .json("No existe un usuario registrado con esa información.");
+    }
+    /*-------------------------de aca para alla empezar a modificar,tengo q armar un link secreto y mandarlo con nodemailer al mail*/
+    if (await bcrypt.compare(contraseña, user.contraseña)) {
+      /*----MAGIA JWT--------------*/
+      const accessToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+        expiresIn: 86400,
+      });
+      const { contraseña, tareas, ...rest } = user._doc;
+      return res.status(200).json({ accessToken, ...rest });
+    } else {
+      return res.status(401).json("Usuario o contraseña no coinciden.");
+    }
+  } catch (error) {
+    res.status(500).json(error.message);
+  }
+}
+module.exports = { registerUsuario, loginUsuario, forgotPassword };
