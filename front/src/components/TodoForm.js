@@ -7,13 +7,10 @@ import { actions } from "../Context/reducer";
 
 export const TodoForm = () => {
   const { tasks, dispatch, error } = useGlobalContext();
-  /*---------REDIRECT---------------------*/
-  let navigate = useNavigate();
   /*/-----------------------------------*/
   const [inputNuevaTarea, setInputNuevaTarea] = useState("");
   /*-------CONEXION DATABASE------------*/
   /*------get tareas ON LOAD*/
-
   useEffect(() => {
     function fetchAPI() {
       tareasAPI.fetchTareasTodas(dispatch);

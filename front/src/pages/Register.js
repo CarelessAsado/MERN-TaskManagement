@@ -1,45 +1,46 @@
-import React, { useState, useEffect } from "react";
+import { useState } from "react";
 import "./Register.css";
 import { registerPost, loginPost } from "../API/userAPI";
 import { Link, useNavigate } from "react-router-dom";
 import { useGlobalContext } from "../Hooks/useGlobalContext";
-export const Register = () => {
+import { actions } from "../Context/reducer";
+export const RegisterOrLogin = () => {
   const [emailUsuario, setEmailUsuario] = useState("");
   const [contraseña, setContraseña] = useState("");
   const [confirmaContraseña, setConfirmaContraseña] = useState("");
-  const [error, setError] = useState([]);
   const [success, setSuccess] = useState("");
   /*---------------------------------------*/
-  const { dispatch } = useGlobalContext();
+  const { dispatch, error } = useGlobalContext();
   /*----------------REDIRECT------------------------------*/
   let navigate = useNavigate();
-
-  async function handleSubmitRegister(e) {
+  /*-----------------------REGISTER-----------------------*/
+  function handleSubmitRegister(e) {
     e.preventDefault();
     if (!emailUsuario || !contraseña || !confirmaContraseña) {
-      return setError(["No puede haber campos vacíos."]);
+      return dispatch({
+        type: actions.VALIDATION_ERROR,
+        payload: "No puede haber campos vacíos.",
+      });
     }
-    try {
-      await registerPost({
+    return registerPost(
+      {
         emailUsuario,
         contraseña,
         confirmaContraseña,
-      });
-      setError([]);
-      setSuccess("Te registraste exitosamente. Podés iniciar sesión.");
-      return navigate("/login");
-    } catch (error) {
-      if (!error.response) {
-        return setError(["Ocurrió un error. Intentá de nuevo más tarde."]);
-      }
-      setError([error.response.data]);
-    }
+      },
+      dispatch,
+      navigate,
+      setSuccess
+    );
   }
   /*----------HACER LOGIN---------*/
-  async function handleSubmitLogin(e) {
+  function handleSubmitLogin(e) {
     e.preventDefault();
     if (!emailUsuario || !contraseña) {
-      return setError(["No puede haber campos vacíos."]);
+      return dispatch({
+        type: actions.VALIDATION_ERROR,
+        payload: "No puede haber campos vacíos.",
+      });
     }
     loginPost({ emailUsuario, contraseña }, dispatch, navigate);
   }
@@ -58,10 +59,13 @@ export const Register = () => {
             : "Iniciá sesión"}
         </h2>
       </header>
-      {error.length > 0 ? (
+      {error ? (
         <div className="errorContainer">
           <div>{error}</div>
-          <i className="fas fa-times" onClick={() => setError([])}></i>
+          <i
+            className="fas fa-times"
+            onClick={() => dispatch({ type: actions.CLEAR_ERRORS })}
+          ></i>
         </div>
       ) : (
         ""

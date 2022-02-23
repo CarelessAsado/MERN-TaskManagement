@@ -2,7 +2,7 @@ import "./App.css";
 import { Routes, Route } from "react-router-dom";
 
 /*-----------PAGES**********************/
-import { Register } from "./pages/Register";
+import { RegisterOrLogin } from "./pages/Register";
 import { Main } from "./pages/Main";
 /*----------JWT RELATED-----------------*/
 import { PersistLogin } from "./components/PersistLogin";
@@ -18,8 +18,8 @@ function App() {
               <Route path="/" element={<Main />}></Route>
             </Route>
           </Route>
-          <Route path="/register" element={<Register />}></Route>
-          <Route path="/login" element={<Register />}></Route>
+          <Route path="/register" element={<RegisterOrLogin />}></Route>
+          <Route path="/login" element={<RegisterOrLogin />}></Route>
         </Routes>
       </div>
     </div>

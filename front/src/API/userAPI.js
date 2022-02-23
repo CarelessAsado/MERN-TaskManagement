@@ -1,12 +1,15 @@
 import { actions } from "../Context/reducer";
 import axios, { axiosPRELogin } from "./url";
-
+import { tareasAPI } from "./tareasAPI";
 const url = "users/auth";
-export const registerPost = async (usuario) => {
+export const registerPost = async (usuario, dispatch, navigate, setSuccess) => {
   try {
-    return await axiosPRELogin.post(url + "/register", usuario);
+    await axiosPRELogin.post(url + "/register", usuario);
+    setSuccess("Te registraste exitosamente. Podés iniciar sesión.");
+    navigate("/login");
+    return;
   } catch (error) {
-    console.log(error);
+    tareasAPI.logErrorAPI(error, dispatch, "REGISTER");
   }
 };
 
@@ -20,7 +23,7 @@ export const loginPost = async (usuario, dispatch, navigate) => {
     axios.defaults.headers["auth"] = data.accessToken;
     navigate("/");
   } catch (error) {
-    console.log(error.message);
+    tareasAPI.logErrorAPI(error, dispatch, "LOGIN");
   }
 };
 export const logout = async (dispatch, navigate) => {
