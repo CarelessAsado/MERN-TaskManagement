@@ -52,10 +52,10 @@ export const Register = () => {
         { emailUsuario, contraseña },
         dispatch
       );
-      setError([]);
-      console.log(token);
+
+      console.log(token, "Token pos login, esto va a haber q borrarlo");
       localStorage.setItem("token", JSON.stringify(token));
-      return window.location.replace("/");
+      return navigate("/");
     } catch (error) {
       console.log(error);
       if (!error.response) {
