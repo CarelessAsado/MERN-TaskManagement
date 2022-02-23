@@ -10,15 +10,25 @@ export const TodoForm = () => {
   /*---------REDIRECT---------------------*/
   let navigate = useNavigate();
   /*/-----------------------------------*/
-  const [tareas, setTareas] = useState([]);
   const [inputNuevaTarea, setInputNuevaTarea] = useState("");
+  /*-------CONEXION DATABASE------------*/
+  /*------get tareas ON LOAD*/
 
+  useEffect(() => {
+    function fetchAPI() {
+      tareasAPI.fetchTareasTodas(dispatch);
+    }
+    fetchAPI();
+  }, [dispatch]);
   /*---------------------------SECCION FILTRO---------------------*/
   /*--------------------------------------------------------------*/
   const [stateFilter, setStateFilter] = useState("Todas");
   const [filteredTodos, setFilteredTodos] = useState([]);
   /*----en base al stateFilter voy a decidir de mostrar todas, algunas u otras*/
   useEffect(() => {
+    if (!tasks) {
+      return;
+    }
     if (stateFilter === "Todas") {
       return setFilteredTodos(tasks);
     } else if (stateFilter === "Completadas") {
@@ -27,33 +37,6 @@ export const TodoForm = () => {
     return setFilteredTodos(tasks.filter((item) => item.completada === false));
   }, [tasks, stateFilter]);
 
-  /*-------CONEXION DATABASE------------*/
-  /*------get tareas ON LOAD*/
-
-  const token = JSON.parse(localStorage.getItem("user"));
-  useEffect(() => {
-    async function fetchAPI() {
-      if (!token) {
-        return navigate("/login");
-      }
-      try {
-        const data = await tareasAPI.fetchTareasTodas(
-          dispatch,
-          token.accessToken
-        );
-        setTareas(data);
-      } catch (error) {
-        console.log(error, "ERROR FETCH");
-        console.log(error.message);
-        if (error.message === "Failed to fetch") {
-          /* return setError(["Hubo un problema en la conexión."]); */
-        }
-        /*   setError([error.message]); */
-      }
-    }
-    fetchAPI();
-    // eslint-disable-next-line
-  }, []);
   /*------------GUARDAR TAREAS CON AXIOS.POST---------------*/
   //aca hay q mandar el TOKEN en Headers
   async function handleSubmit(e) {
@@ -64,11 +47,7 @@ export const TodoForm = () => {
         payload: "No puede haber campos vacíos",
       });
     }
-    tareasAPI.guardarTareaPost(
-      { descripcion: inputNuevaTarea },
-      dispatch,
-      token
-    );
+    tareasAPI.guardarTareaPost({ descripcion: inputNuevaTarea }, dispatch);
     setInputNuevaTarea("");
   }
   return (

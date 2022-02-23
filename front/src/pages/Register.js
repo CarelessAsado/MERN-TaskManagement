@@ -14,12 +14,6 @@ export const Register = () => {
   /*----------------REDIRECT------------------------------*/
   let navigate = useNavigate();
 
-  useEffect(() => {
-    if (JSON.parse(localStorage.getItem("token"))) {
-      return navigate("/");
-    }
-  }, [navigate]);
-
   async function handleSubmitRegister(e) {
     e.preventDefault();
     if (!emailUsuario || !contraseña || !confirmaContraseña) {
@@ -47,20 +41,7 @@ export const Register = () => {
     if (!emailUsuario || !contraseña) {
       return setError(["No puede haber campos vacíos."]);
     }
-    try {
-      const { data: token } = await loginPost(
-        { emailUsuario, contraseña },
-        dispatch,
-        navigate
-      );
-    } catch (error) {
-      console.log(error);
-      if (!error.response) {
-        return setError(["Ocurrió un error. Intentá de nuevo más tarde."]);
-      }
-      setError([error.response.data]);
-      console.log(error);
-    }
+    loginPost({ emailUsuario, contraseña }, dispatch, navigate);
   }
   return (
     <form

@@ -2,9 +2,6 @@ import axios from "./url";
 import { actions } from "../Context/reducer";
 const url = "tareas";
 export const tareasAPI = {
-  config: (token) => {
-    return { headers: { auth: token } };
-  },
   logErrorAPI: function (error, dispatch, etapa) {
     console.log(
       error,
@@ -21,9 +18,9 @@ export const tareasAPI = {
     }
     dispatch({ type: actions.FAILURE_ACTION, payload: error.response.data });
   },
-  fetchTareasTodas: async function (dispatch, token) {
+  fetchTareasTodas: async function (dispatch) {
     try {
-      let { data } = await axios.get(url, tareasAPI.config(token));
+      let { data } = await axios.get(url);
       let dataPayload = data.map((item) => {
         return {
           id: item._id,
@@ -38,36 +35,35 @@ export const tareasAPI = {
     }
   },
   /*---------------------------------DELETEEEEE--------------*/
-  borrarTarea: async function (id, dispatch, token) {
+  borrarTarea: async function (id, dispatch) {
     try {
       dispatch({ type: actions.START_ACTION });
-      await axios.delete(url + `/${id}`, tareasAPI.config(token));
+      await axios.delete(url + `/${id}`);
       dispatch({ type: actions.REMOVE, payload: id });
       return;
     } catch (error) {
       this.logErrorAPI(error, dispatch, "BORRAR TAREA");
     }
   },
-  guardarTareaPost: async function (input, dispatch, token) {
+  guardarTareaPost: async function (input, dispatch) {
     try {
       dispatch({ type: actions.START_ACTION });
       const {
         data: { _id: id, descripcion, completada },
-      } = await axios.post(url, input, tareasAPI.config(token));
+      } = await axios.post(url, input);
       dispatch({ type: actions.ADD, payload: { id, descripcion, completada } });
       return;
     } catch (error) {
       this.logErrorAPI(error, dispatch, "GUARDAR TAREA");
     }
   },
-  actualizarTarea: async function (id, itemAActualizar, dispatch, token) {
+  actualizarTarea: async function (id, itemAActualizar, dispatch) {
     dispatch({ type: actions.START_ACTION });
     try {
       let { data } = await axios.patch(
         url + `/${id}`,
 
-        itemAActualizar,
-        tareasAPI.config(token)
+        itemAActualizar
       );
       console.log(data, "ver si esta el objeto");
       dispatch({ type: actions.UPDATE, payload: { ...itemAActualizar, id } });

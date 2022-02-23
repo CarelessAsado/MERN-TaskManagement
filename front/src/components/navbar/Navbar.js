@@ -1,24 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { MenuList } from "./MenuLinks";
 import { Link, useNavigate } from "react-router-dom";
 import "./Navbar.css";
 import { useGlobalContext } from "../../Hooks/useGlobalContext";
+import { logout } from "../../API/userAPI";
 
 const Navbar = () => {
   const [showMenu, setShowMenu] = useState(false);
-  const { user } = useGlobalContext();
-  console.log(user, "USER");
+  const { user, dispatch } = useGlobalContext();
   const navigate = useNavigate();
-  /*  const [isLogged, setIsLogged] = useState(false); */
-  /*  useEffect(() => {
-    if (localStorage.getItem("token")) {
-      setIsLogged(true);
-    }
-  }, []); */
-  function logout() {
-    localStorage.removeItem("token");
+
+  function logoutProcess() {
     setShowMenu(!showMenu);
-    navigate("/login");
+    logout(dispatch, navigate);
   }
   return (
     <nav>
@@ -43,7 +37,9 @@ const Navbar = () => {
                 <li key={index}>
                   <Link
                     to={`${item.url}`}
-                    onClick={item.title === "Cerrar sesión" ? logout : ""}
+                    onClick={
+                      item.title === "Cerrar sesión" ? logoutProcess : ""
+                    }
                   >
                     {" "}
                     {item.title}

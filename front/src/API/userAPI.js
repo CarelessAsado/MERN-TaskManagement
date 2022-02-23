@@ -23,3 +23,10 @@ export const loginPost = async (usuario, dispatch, navigate) => {
     console.log(error.message);
   }
 };
+export const logout = async (dispatch, navigate) => {
+  dispatch({ type: actions.LOGOUT });
+  localStorage.removeItem("user");
+  axios.defaults.headers["auth"] = "";
+  console.log("Navegando hacia el espacio");
+  navigate("login");
+};

@@ -30,7 +30,7 @@ export function reducerTasksUser(state, action) {
       return { ...state, loading: false, user: action.payload };
     /*--------------------LOGOUT------------------*/
     case actions.LOGOUT:
-      return { ...state, loading: false, user: null };
+      return { ...state, loading: false, user: null, tasks: null };
     /*----------------------------------------------------*/
     case actions.FETCH:
       return { ...state, loading: false, tasks: action.payload };

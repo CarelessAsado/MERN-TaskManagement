@@ -10,9 +10,9 @@ export const TodoItem = ({ tarea }) => {
   /*-----------------------*/
   const inputAModificar = useRef();
   /*------------------------------------*/
-  const token = JSON.parse(localStorage.getItem("token"));
+
   function deleteTarea(id) {
-    tareasAPI.borrarTarea(id, dispatch, token);
+    tareasAPI.borrarTarea(id, dispatch);
   }
   function changeCompletada(id) {
     let { descripcion, completada } = tasks.find((item) => item.id === id);
@@ -22,8 +22,7 @@ export const TodoItem = ({ tarea }) => {
         descripcion,
         completada: !completada,
       },
-      dispatch,
-      token
+      dispatch
     );
   }
   /*-------------------BEGIN UPDATE DESCRIPCION-----------*/
@@ -52,8 +51,7 @@ export const TodoItem = ({ tarea }) => {
         descripcion: inputTarea,
         completada,
       },
-      dispatch,
-      token
+      dispatch
     );
   }
   return (

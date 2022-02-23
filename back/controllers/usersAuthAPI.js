@@ -66,7 +66,7 @@ async function loginUsuario(req, res) {
       const accessToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
         expiresIn: 86400,
       });
-      const { contraseña, ...rest } = user._doc;
+      const { contraseña, tareas, ...rest } = user._doc;
       return res.status(200).json({ accessToken, ...rest });
     } else {
       return res.status(401).json("Usuario o contraseña no coinciden.");
