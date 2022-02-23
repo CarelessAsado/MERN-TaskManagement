@@ -50,12 +50,9 @@ export const Register = () => {
     try {
       const { data: token } = await loginPost(
         { emailUsuario, contraseña },
-        dispatch
+        dispatch,
+        navigate
       );
-
-      console.log(token, "Token pos login, esto va a haber q borrarlo");
-      localStorage.setItem("token", JSON.stringify(token));
-      return navigate("/");
     } catch (error) {
       console.log(error);
       if (!error.response) {

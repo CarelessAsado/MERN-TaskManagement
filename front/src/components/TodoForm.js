@@ -11,7 +11,6 @@ export const TodoForm = () => {
   let navigate = useNavigate();
   /*/-----------------------------------*/
   const [tareas, setTareas] = useState([]);
-
   const [inputNuevaTarea, setInputNuevaTarea] = useState("");
 
   /*---------------------------SECCION FILTRO---------------------*/
@@ -31,14 +30,17 @@ export const TodoForm = () => {
   /*-------CONEXION DATABASE------------*/
   /*------get tareas ON LOAD*/
 
-  const token = JSON.parse(localStorage.getItem("token"));
+  const token = JSON.parse(localStorage.getItem("user"));
   useEffect(() => {
     async function fetchAPI() {
       if (!token) {
         return navigate("/login");
       }
       try {
-        const data = await tareasAPI.fetchTareasTodas(dispatch, token);
+        const data = await tareasAPI.fetchTareasTodas(
+          dispatch,
+          token.accessToken
+        );
         setTareas(data);
       } catch (error) {
         console.log(error, "ERROR FETCH");
