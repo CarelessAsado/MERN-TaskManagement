@@ -29,3 +29,5 @@ app.use(verifyToken);
 
 const tareasAPI = require("./routes/tareasAPI");
 app.use("/api/tareas", tareasAPI);
+const userProfileAPI = require("./routes/userProfile");
+app.use("/api/user/profile", userProfileAPI);

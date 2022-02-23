@@ -4,7 +4,8 @@ import { Routes, Route } from "react-router-dom";
 /*-----------PAGES**********************/
 import { RegisterOrLogin } from "./pages/Register";
 import { Main } from "./pages/Main";
-import { UserProfile } from "./pages/UserProfile";
+import { UserProfile } from "./pages/UserProfile/UserProfile";
+
 /*----------JWT RELATED-----------------*/
 import { PersistLogin } from "./components/PersistLogin";
 import { ProtectedByAuth } from "./components/ProtectedByAuth";

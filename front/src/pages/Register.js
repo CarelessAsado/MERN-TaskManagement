@@ -36,16 +36,12 @@ export const RegisterOrLogin = () => {
   /*----------HACER LOGIN---------*/
   function handleSubmitLogin(e) {
     e.preventDefault();
-
     if (!emailUsuario || !contraseña) {
-      console.log(emailUsuario, contraseña, "DEBERIAN ESTAR VACIOS");
       return dispatch({
         type: actions.VALIDATION_ERROR,
         payload: "No puede haber campos vacíos.",
       });
     }
-    console.log("si llega aca el problema es en el login API");
-    console.log(emailUsuario, contraseña);
     loginPost({ emailUsuario, contraseña }, dispatch, navigate);
   }
   return (
