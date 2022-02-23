@@ -18,8 +18,7 @@ export const Register = () => {
     if (JSON.parse(localStorage.getItem("token"))) {
       return navigate("/");
     }
-    // eslint-disable-next-line
-  }, []);
+  }, [navigate]);
 
   async function handleSubmitRegister(e) {
     e.preventDefault();
