@@ -30,11 +30,13 @@ export const TodoItem = ({ tarea }) => {
   function beginUpdateDescripcion() {
     setIsEditing(true);
     inputAModificar.current.focus();
-    inputAModificar.current.removeAttribute("readonly");
+    /* inputAModificar.current.removeAttribute("readonly"); */
   }
   /*-----------------------------------------------*/
   async function finishUpdateDescripcion(id, descripcionOriginal) {
+    setIsEditing(false);
     if (!inputTarea) {
+      setInputTarea(descripcionOriginal);
       return dispatch({
         type: actions.VALIDATION_ERROR,
         payload: "No puede haber campos vacíos",
@@ -56,8 +58,7 @@ export const TodoItem = ({ tarea }) => {
         token
       );
 
-      inputAModificar.current.setAttribute("readonly", true);
-      setIsEditing(false);
+      /*  inputAModificar.current.setAttribute("readonly", true); */
     } catch (error) {
       /*      if (error.message === "Network Error") {
         setInputTarea(descripcionOriginal);
@@ -73,7 +74,7 @@ export const TodoItem = ({ tarea }) => {
         className={`${isEditing ? "edit" : ""} ${
           tarea.completada ? "completada" : ""
         } `}
-        readOnly
+        readOnly={!isEditing}
         value={inputTarea}
         onChange={(e) => {
           setInputTarea(e.target.value);
