@@ -1,22 +1,24 @@
 import React, { useState, useEffect } from "react";
 import { MenuList } from "./MenuLinks";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./Navbar.css";
+import { useGlobalContext } from "../../Hooks/useGlobalContext";
 
 const Navbar = () => {
   const [showMenu, setShowMenu] = useState(false);
-  const [isLogged, setIsLogged] = useState(false);
-  useEffect(() => {
+  const { user } = useGlobalContext();
+  console.log(user, "USER");
+  const navigate = useNavigate();
+  /*  const [isLogged, setIsLogged] = useState(false); */
+  /*  useEffect(() => {
     if (localStorage.getItem("token")) {
       setIsLogged(true);
     }
-  }, []);
+  }, []); */
   function logout() {
-    if (isLogged) {
-      localStorage.removeItem("token");
-      setShowMenu(!showMenu);
-      window.location("/login");
-    }
+    localStorage.removeItem("token");
+    setShowMenu(!showMenu);
+    navigate("/login");
   }
   return (
     <nav>
@@ -35,28 +37,27 @@ const Navbar = () => {
       </div>
       {/* add the active class to show or not the nav links */}
       <ul className={showMenu ? "" : "active"}>
-        {isLogged &&
-          MenuList.hayUser.map((item, index) => {
-            return (
-              <li key={index}>
-                <Link
-                  to={`${item.url}`}
-                  onClick={item.title === "Cerrar sesión" ? logout : ""}
-                >
-                  {" "}
-                  {item.title}
-                </Link>
-              </li>
-            );
-          })}
-        {isLogged ||
-          MenuList.noHayUser.map((item, index) => {
-            return (
-              <li key={index}>
-                <Link to={`${item.url}`}> {item.title}</Link>
-              </li>
-            );
-          })}
+        {user
+          ? MenuList.hayUser.map((item, index) => {
+              return (
+                <li key={index}>
+                  <Link
+                    to={`${item.url}`}
+                    onClick={item.title === "Cerrar sesión" ? logout : ""}
+                  >
+                    {" "}
+                    {item.title}
+                  </Link>
+                </li>
+              );
+            })
+          : MenuList.noHayUser.map((item, index) => {
+              return (
+                <li key={index}>
+                  <Link to={`${item.url}`}> {item.title}</Link>
+                </li>
+              );
+            })}
       </ul>
     </nav>
   );

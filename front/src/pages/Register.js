@@ -2,12 +2,15 @@ import React, { useState, useEffect } from "react";
 import "./Register.css";
 import { registerPost, loginPost } from "../API/userAPI";
 import { Link, useNavigate } from "react-router-dom";
+import { useGlobalContext } from "../Hooks/useGlobalContext";
 export const Register = () => {
   const [emailUsuario, setEmailUsuario] = useState("");
   const [contraseña, setContraseña] = useState("");
   const [confirmaContraseña, setConfirmaContraseña] = useState("");
   const [error, setError] = useState([]);
   const [success, setSuccess] = useState("");
+  /*---------------------------------------*/
+  const { dispatch } = useGlobalContext();
   /*----------------REDIRECT------------------------------*/
   let navigate = useNavigate();
 
@@ -46,7 +49,10 @@ export const Register = () => {
       return setError(["No puede haber campos vacíos."]);
     }
     try {
-      const { data: token } = await loginPost({ emailUsuario, contraseña });
+      const { data: token } = await loginPost(
+        { emailUsuario, contraseña },
+        dispatch
+      );
       setError([]);
       console.log(token);
       localStorage.setItem("token", JSON.stringify(token));
