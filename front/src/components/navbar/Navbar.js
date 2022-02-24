@@ -34,7 +34,11 @@ const Navbar = () => {
         {user ? (
           <>
             <li>
-              <Link to={`/profile/${user._id}`}>Usuario</Link>
+              <Link to={`/profile/${user._id}`}>
+                {!user.nombre || user.nombre.length > 10
+                  ? "Usuario"
+                  : user.nombre}
+              </Link>
             </li>
             {MenuList.hayUser.map((item, index) => {
               return (

@@ -38,13 +38,21 @@ export const logout = async (dispatch, navigate) => {
 export const forgotPasswordSendMeAnEmail = async (
   e,
   emailUsuario,
-  dispatch
+  dispatch,
+  setSuccess
 ) => {
   e.preventDefault();
   try {
+    if (!emailUsuario) {
+      return dispatch({
+        type: actions.VALIDATION_ERROR,
+        payload: "Completar email.",
+      });
+    }
     await axiosPRELogin.post(url + "/forgot-password", { emailUsuario });
-    /*     setSuccess("Te registraste exitosamente. Podés iniciar sesión.");
-    navigate("/login"); */
+    setSuccess(
+      "Email enviado. Revisá tu casilla de mail para continuar con el proceso."
+    );
     return;
   } catch (error) {
     tareasAPI.logErrorAPI(

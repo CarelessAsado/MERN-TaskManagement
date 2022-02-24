@@ -8,6 +8,7 @@ export const RegisterOrLogin = () => {
   const [emailUsuario, setEmailUsuario] = useState("");
   const [contraseña, setContraseña] = useState("");
   const [confirmaContraseña, setConfirmaContraseña] = useState("");
+  const [nombre, setNombre] = useState("");
   const [success, setSuccess] = useState("");
   /*---------------------------------------*/
   const { dispatch, error } = useGlobalContext();
@@ -16,7 +17,7 @@ export const RegisterOrLogin = () => {
   /*-----------------------REGISTER-----------------------*/
   function handleSubmitRegister(e) {
     e.preventDefault();
-    if (!emailUsuario || !contraseña || !confirmaContraseña) {
+    if (!emailUsuario || !contraseña || !confirmaContraseña || !nombre) {
       return dispatch({
         type: actions.VALIDATION_ERROR,
         payload: "No puede haber campos vacíos.",
@@ -27,6 +28,7 @@ export const RegisterOrLogin = () => {
         emailUsuario,
         contraseña,
         confirmaContraseña,
+        nombre,
       },
       dispatch,
       navigate,
@@ -59,7 +61,7 @@ export const RegisterOrLogin = () => {
             : "Iniciá sesión"}
         </h2>
       </header>
-      {error ? (
+      {error && (
         <div className="errorContainer">
           <div>{error}</div>
           <i
@@ -67,13 +69,23 @@ export const RegisterOrLogin = () => {
             onClick={() => dispatch({ type: actions.CLEAR_ERRORS })}
           ></i>
         </div>
-      ) : (
-        ""
       )}
       {success && (
         <div className="errorContainer success">
           <div>{success}</div>
           <i className="fas fa-times" onClick={() => setSuccess("")}></i>
+        </div>
+      )}
+      {window.location.pathname === "/register" && (
+        <div className="formControl">
+          <label htmlFor="nombre"></label>
+          <input
+            type="text"
+            id="nombre"
+            placeholder="Nombre *"
+            value={nombre}
+            onChange={(e) => setNombre(e.target.value)}
+          />
         </div>
       )}
       <div className="formControl">

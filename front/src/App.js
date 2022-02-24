@@ -5,7 +5,7 @@ import { Routes, Route } from "react-router-dom";
 import { RegisterOrLogin } from "./pages/Register";
 import { Main } from "./pages/Main";
 import { UserProfile } from "./pages/UserProfile/UserProfile";
-import { ForgotPassword } from "./pages/ForgotPassword";
+import { ForgotPassword } from "./pages/ForgotPassword/ForgotPassword";
 /*----------JWT RELATED-----------------*/
 import { PersistLogin } from "./components/PersistLogin";
 import { ProtectedByAuth } from "./components/ProtectedByAuth";

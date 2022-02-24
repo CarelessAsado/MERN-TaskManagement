@@ -6,19 +6,19 @@ import { userProfileAPI } from "../../API/userProfileAPI";
 export const UserProfile = () => {
   const { user, dispatch } = useGlobalContext();
   const [showOverlay, setShowOverlay] = useState(false);
-
+  const { nombre = "Usuario", emailUsuario, _id } = user;
   useEffect(() => {
-    userProfileAPI.getUserProfile(user._id, dispatch);
-  }, [user._id, dispatch]);
+    userProfileAPI.getUserProfile(_id, dispatch);
+  }, [_id, dispatch]);
   function changeOverlay() {
     setShowOverlay(!showOverlay);
   }
   return (
     <>
-      {" "}
       <div>UserProfile</div>
       <h2>Under construction</h2>
-      <div>{user.emailUsuario}</div>
+      <h2>{nombre}</h2>
+      <div>{emailUsuario}</div>
       <button
         className="changePwd"
         type="submit"

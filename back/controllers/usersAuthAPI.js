@@ -5,13 +5,16 @@ const { TareaModel: Tarea } = require("../models/tareas");
 const bcrypt = require("bcrypt");
 /*-----JWT--------------*/
 const jwt = require("jsonwebtoken");
+/*------NODEMAILER---------------*/
+const sendEmail = require("../middleware/nodemailer");
+const { currentUrl } = require("../models/currentUrl");
 
 async function registerUsuario(req, res) {
   try {
-    const { emailUsuario, contraseña, confirmaContraseña } = req.body;
+    const { emailUsuario, contraseña, confirmaContraseña, nombre } = req.body;
     /*---------------PRE VALIDATION------------------------*/
     let errorString = "";
-    if (!emailUsuario || !confirmaContraseña || !contraseña) {
+    if (!emailUsuario || !confirmaContraseña || !contraseña || !nombre) {
       errorString += "No puede haber campos vacíos. ";
     }
     if (contraseña && (contraseña.length < 6 || contraseña.length > 15)) {
@@ -28,9 +31,9 @@ async function registerUsuario(req, res) {
     let usuarioACrear = new User({
       emailUsuario,
       contraseña: passHashed,
+      nombre,
     });
     const nuevoUsuario = await usuarioACrear.save();
-    /*-----setSuccess en REACT FRONT*/
     res.status(201).json(nuevoUsuario);
   } catch (error) {
     if (error.name == "ValidationError") {
@@ -79,6 +82,7 @@ async function loginUsuario(req, res) {
 /*----SEND ME AN EMAIL*/
 async function forgotPassword(req, res) {
   const { emailUsuario } = req.body;
+  console.log(emailUsuario);
   if (!emailUsuario) {
     return res.status(400).json("No puede haber campos vacíos");
   }
@@ -90,17 +94,23 @@ async function forgotPassword(req, res) {
         .status(401)
         .json("No existe un usuario registrado con esa información.");
     }
-    /*-------------------------de aca para alla empezar a modificar,tengo q armar un link secreto y mandarlo con nodemailer al mail*/
-    if (await bcrypt.compare(contraseña, user.contraseña)) {
-      /*----MAGIA JWT--------------*/
-      const accessToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-        expiresIn: 86400,
-      });
-      const { contraseña, tareas, ...rest } = user._doc;
-      return res.status(200).json({ accessToken, ...rest });
-    } else {
-      return res.status(401).json("Usuario o contraseña no coinciden.");
-    }
+    console.log(currentUrl, "VER SI APARECE LOCALHHHHHOST");
+    await sendEmail(user);
+    console.log("pos funcion sendemail");
+    /*---------generate token with id an email----------*/
+    const accessToken = jwt.sign(
+      { id: user._id, emailUsuario: user.emailUsuario },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "1h",
+      }
+    );
+
+    return res
+      .status(200)
+      .json(
+        "Revisá tu casilla de email para proseguir con el proceso de cambio de contraseña."
+      );
   } catch (error) {
     res.status(500).json(error.message);
   }

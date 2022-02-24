@@ -23,12 +23,18 @@ function connectServer() {
 }
 /*--------ROUTES---------------*/
 const usersAPI = require("./routes/usersAuthAPI");
-app.use("/api/users/auth", usersAPI);
-
+/*----URLs models--------*/
+const {
+  urlAuthAPI,
+  urlTareasAPI,
+  urlUserProfileAPI,
+} = require("./models/currentUrl");
+app.use(urlAuthAPI, usersAPI);
+/*----------------------*/
 const verifyToken = require("./middleware/authJWT");
 app.use(verifyToken);
 
 const tareasAPI = require("./routes/tareasAPI");
-app.use("/api/tareas", tareasAPI);
+app.use(urlTareasAPI, tareasAPI);
 const userProfileAPI = require("./routes/userProfile");
-app.use("/api/user/profile", userProfileAPI);
+app.use(urlUserProfileAPI, userProfileAPI);

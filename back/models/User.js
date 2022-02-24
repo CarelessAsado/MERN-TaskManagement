@@ -7,6 +7,9 @@ const User = new mongoose.Schema({
     required: [true, "Proveer email."],
     /*-------------OJO Q ESTO NO ES UN VALIDATOR-------------*/
     unique: [true, "Ya existe un usuario registrado con ese mail."],
+    trim: true,
+    lowercase: true,
+    maxlength: [15, "No puede exceder de 15 caracteres el nombre."],
   },
   fecha: {
     type: Date,
@@ -16,6 +19,12 @@ const User = new mongoose.Schema({
   contraseña: {
     type: String,
     required: [true, "Proveer contraseña."],
+  },
+  nombre: {
+    type: String,
+    required: [true, "Proveer nombre."],
+    trim: true,
+    lowercase: true,
   },
   tareas: [TareaSchema],
 });
