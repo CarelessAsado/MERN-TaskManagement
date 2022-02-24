@@ -42,14 +42,16 @@ export const forgotPasswordSendMeAnEmail = async (
   setSuccess
 ) => {
   e.preventDefault();
+  if (!emailUsuario) {
+    return dispatch({
+      type: actions.VALIDATION_ERROR,
+      payload: "Completar email.",
+    });
+  }
   try {
-    if (!emailUsuario) {
-      return dispatch({
-        type: actions.VALIDATION_ERROR,
-        payload: "Completar email.",
-      });
-    }
-    await axiosPRELogin.post(url + "/forgot-password", { emailUsuario });
+    await axiosPRELogin.post(url + "/forgot-password/sendEmail", {
+      emailUsuario,
+    });
     setSuccess(
       "Email enviado. Revisá tu casilla de mail para continuar con el proceso."
     );
@@ -59,6 +61,42 @@ export const forgotPasswordSendMeAnEmail = async (
       error,
       dispatch,
       "FORGOT PASSWORD SEND ME AN EMAIL PROCESS"
+    );
+  }
+};
+export const forgotPasswordCHANGEPWD = async (
+  e,
+  contraseña,
+  contraseña2,
+  dispatch,
+  setSuccess,
+  secretLinkId
+) => {
+  /*-----------chequear q los names de las pwd coincidan en el back*/
+  e.preventDefault();
+  /*-----------VER SI VALIDO EN LA OTRA CARPETA*/
+  /*   if (!emailUsuario) {
+    return dispatch({
+      type: actions.VALIDATION_ERROR,
+      payload: "Completar email.",
+    });
+  } */
+  /*---------------*/
+  try {
+    await axiosPRELogin.put(
+      url + "/forgot-password/" + secretLinkId + "/changePassword",
+      {
+        contraseña,
+        contraseña2,
+      }
+    );
+    setSuccess("Operación exitosa. Ya podés iniciar sesión.");
+    return;
+  } catch (error) {
+    tareasAPI.logErrorAPI(
+      error,
+      dispatch,
+      "FORGOT PASSWORD CHANGE PWD FINISHING PROCEDURE"
     );
   }
 };

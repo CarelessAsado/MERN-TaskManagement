@@ -115,4 +115,18 @@ async function forgotPassword(req, res) {
     res.status(500).json(error.message);
   }
 }
-module.exports = { registerUsuario, loginUsuario, forgotPassword };
+function forgotPasswordCreateNew(req, res) {
+  console.log(req.params);
+  console.log(req.body, "BODY");
+  try {
+    res.json("hola");
+  } catch (error) {
+    console.log(error);
+  }
+}
+module.exports = {
+  registerUsuario,
+  loginUsuario,
+  forgotPassword,
+  forgotPasswordCreateNew,
+};

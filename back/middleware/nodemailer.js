@@ -19,7 +19,9 @@ async function sendEmail(user) {
   /*-------------------ESTA PARTE SE PUEDE AGREGAR DINAMICAMENTE
   A la funcion .sendMail se le puede agregar un CB si no querés usar promises*/
   try {
-    const goldenLink = currentUrl + urlAuthAPI + "/" + user._id;
+    const goldenLink =
+      /*----------CREO Q ESTA URL TENDRIA Q SER EL FRONT EN REACT----*/
+      currentUrl + "/forgot-password/" + user._id + "/createPassword";
     let info = await transporter.sendMail({
       from: `"Rodrigo López" <${process.env.NODEMAIL}>`, // sender address
       to: "rodrigohernanlopez89@gmail.com, " + emailUsuario, //PONER MAIL DINAMICO DSP

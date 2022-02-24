@@ -6,6 +6,7 @@ import { RegisterOrLogin } from "./pages/Register";
 import { Main } from "./pages/Main";
 import { UserProfile } from "./pages/UserProfile/UserProfile";
 import { ForgotPassword } from "./pages/ForgotPassword/ForgotPassword";
+import { ForgotChangePassword } from "./pages/ForgotChangePassword";
 /*----------JWT RELATED-----------------*/
 import { PersistLogin } from "./components/PersistLogin";
 import { ProtectedByAuth } from "./components/ProtectedByAuth";
@@ -26,6 +27,10 @@ function App() {
           <Route path="/register" element={<RegisterOrLogin />}></Route>
           <Route path="/login" element={<RegisterOrLogin />}></Route>
           <Route path="/forgot-password" element={<ForgotPassword />}></Route>
+          <Route
+            path="/forgot-password/:secretLinkId/changePassword"
+            element={<ForgotChangePassword />}
+          ></Route>
         </Routes>
       </div>
     </div>
