@@ -25,3 +25,4 @@ yarn-error.log*
 profile.REST
 .REST
 auth.REST
+tasks.REST

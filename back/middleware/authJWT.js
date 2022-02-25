@@ -17,7 +17,6 @@ function verifyToken(req, res, next) {
                             DE OLVIDARSE EL PASSWORD Y Q MANDAMOS EL 
                             SECRETLINK*/
 function verifyEmailLink(req, res, next) {
-  console.log(req.params, "PARAMS EN MIDDLE");
   const { secretLinkId: secretLink } = req.params;
   if (!secretLink) {
     return res.status(401).send("No estás autorizado.");
