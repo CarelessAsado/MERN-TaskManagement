@@ -16,7 +16,6 @@ export const UserProfile = () => {
   return (
     <>
       <div>UserProfile</div>
-      <h2>Under construction</h2>
       <h2>{nombre}</h2>
       <div>{emailUsuario}</div>
       <button

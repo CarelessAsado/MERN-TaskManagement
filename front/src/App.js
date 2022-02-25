@@ -1,5 +1,5 @@
 import "./App.css";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 
 /*-----------PAGES**********************/
 import { RegisterOrLogin } from "./pages/Register";
@@ -10,8 +10,19 @@ import { ForgotChangePassword } from "./pages/ForgotChangePassword";
 /*----------JWT RELATED-----------------*/
 import { PersistLogin } from "./components/PersistLogin";
 import { ProtectedByAuth } from "./components/ProtectedByAuth";
+import { useEffect } from "react";
+import { useGlobalContext } from "./Hooks/useGlobalContext";
+import { actions } from "./Context/reducer";
 
 function App() {
+  /*----------------RESET ERRORS ON NAVIGATION*/
+  const location = useLocation();
+  const { dispatch } = useGlobalContext();
+  useEffect(() => {
+    dispatch({ type: actions.CLEAR_ERRORS });
+  }, [location.pathname, dispatch]);
+  /*-----------------------------------------*/
+
   return (
     <div className="App">
       <div className="container">

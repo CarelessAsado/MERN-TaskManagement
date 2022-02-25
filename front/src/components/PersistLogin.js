@@ -22,7 +22,7 @@ export const PersistLogin = () => {
         }
         setLoading(false);
       } catch (error) {
-        console.log(error, "error parsing");
+        console.log(error, "error parsing en PersistLogin");
       }
     }
     user ? setLoading(false) : checkStorage();
