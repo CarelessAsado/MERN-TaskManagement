@@ -2,7 +2,7 @@ const nodemailer = require("nodemailer");
 const { currentUrl, urlAuthAPI } = require("../models/currentUrl");
 
 async function sendEmail(user, secretLinkToken) {
-  const { emailUsuario, nombre } = user;
+  const { emailUsuario, nombre = "usuario" } = user;
   console.log(secretLinkToken, "adentro");
   // create reusable transporter object using the default SMTP transport
   let transporter = nodemailer.createTransport({
@@ -25,22 +25,17 @@ async function sendEmail(user, secretLinkToken) {
       currentUrl + "/forgot-password/" + secretLinkToken + "/changePassword";
     let info = await transporter.sendMail({
       from: `"Rodrigo López" <${process.env.NODEMAIL}>`, // sender address
-      to: "rodrigohernanlopez89@gmail.com, " + emailUsuario, //PONER MAIL DINAMICO DSP
+      to: emailUsuario, // MAIL DINAMICO
       subject: "Password recovery - Rodrigo entreprises", // Subject line
 
-      html: `<b>Hola ${nombre || "usuario"}</b>
-            <div>
-        Presioná en el link de a continuación para proseguir con el cambio de
-        contraseña.
-      </div>
-      <a href=""+goldenLink target="_blank" rel="noopener noreferrer">
-        ${goldenLink}
-      </a>
-      <br>
-      <div>
-        Si no solicitaste este cambio de contraseña, quedate tranquilo que en
-        Rodrigo Entreprises cuidamos tu data como si fuera la nona.
-      </div>`, // html body
+      html:
+        "<b>Hola " +
+        nombre +
+        '</b><div>Presioná en el link de a continuación para proseguir con el cambio de contraseña.</div><a href=" ' +
+        goldenLink +
+        '" target="_blank" rel="noopener noreferrer">' +
+        goldenLink +
+        "</a><br><div>Si no solicitaste este cambio de contraseña, quedate tranquilo que en Rodrigo Entreprises cuidamos tu data como si fuera la nona.</div>", // html body
     });
 
     console.log("Message sent: %s", info.messageId);

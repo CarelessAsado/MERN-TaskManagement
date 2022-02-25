@@ -22,6 +22,7 @@ function verifyEmailLink(req, res, next) {
     return res.status(401).send("No estás autorizado.");
   }
   const token = secretLink;
+  console.log(token, req.params, "SECRET LINK MIDDLEWARE CHEQUEANDO");
   jwt.verify(token, process.env.JWT_SECRET, function (err, user) {
     if (err) {
       return res

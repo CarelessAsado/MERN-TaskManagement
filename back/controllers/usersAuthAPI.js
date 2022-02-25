@@ -103,6 +103,7 @@ async function forgotPassword(req, res) {
   }
 }
 async function forgotPasswordCreateNew(req, res) {
+  console.log(req.userChangingPwd, "llegamos", req.body);
   const userToUpdatePwd = await User.findById({ _id: req.userChangingPwd });
   if (!userToUpdatePwd) {
     return res.status(404).json("No existe el usuario.");

@@ -41,6 +41,7 @@ export const forgotPasswordSendMeAnEmail = async (
   dispatch,
   setSuccess
 ) => {
+  setSuccess("");
   e.preventDefault();
   if (!emailUsuario) {
     return dispatch({
@@ -48,6 +49,7 @@ export const forgotPasswordSendMeAnEmail = async (
       payload: "Completar email.",
     });
   }
+  dispatch({ type: actions.START_ACTION });
   try {
     await axiosPRELogin.post(url + "/forgot-password/sendEmail", {
       emailUsuario,
@@ -65,32 +67,20 @@ export const forgotPasswordSendMeAnEmail = async (
   }
 };
 export const forgotPasswordCHANGEPWD = async (
-  e,
-  contraseña,
-  contraseña2,
+  contraseñas,
   dispatch,
-  setSuccess,
-  secretLinkId
+  secretLinkId,
+  setSuccess
 ) => {
-  /*-----------chequear q los names de las pwd coincidan en el back*/
-  e.preventDefault();
-  /*-----------VER SI VALIDO EN LA OTRA CARPETA*/
-  /*   if (!emailUsuario) {
-    return dispatch({
-      type: actions.VALIDATION_ERROR,
-      payload: "Completar email.",
-    });
-  } */
-  /*---------------*/
+  setSuccess("");
+  dispatch({ type: actions.START_ACTION });
   try {
     await axiosPRELogin.put(
       url + "/forgot-password/" + secretLinkId + "/changePassword",
-      {
-        contraseña,
-        contraseña2,
-      }
+      contraseñas
     );
     setSuccess("Operación exitosa. Ya podés iniciar sesión.");
+
     return;
   } catch (error) {
     tareasAPI.logErrorAPI(
