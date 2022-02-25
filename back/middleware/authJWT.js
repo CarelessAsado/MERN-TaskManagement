@@ -10,7 +10,7 @@ function verifyToken(req, res, next) {
       return res.status(403).send("El token no es válido.");
     }
     /*-----Esta el mail tmb pero no lo uso, agregar dsp roles*/
-    req.user = user.id;
+    req.user = user._id;
     next();
   });
 }
@@ -32,7 +32,7 @@ function verifyEmailLink(req, res, next) {
           "El link no es válido. No se puede llevar a cabo el cambio de contraseña."
         );
     }
-    req.userChangingPwd = user.id;
+    req.userChangingPwd = user._id;
     next();
   });
 }

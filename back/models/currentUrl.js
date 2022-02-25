@@ -5,4 +5,5 @@ module.exports.currentUrl = process.env.NODE_ENV
 module.exports.urlAuthAPI = "/api/users/auth";
 module.exports.urlTareasAPI = "/api/tareas";
 module.exports.urlUserProfileAPI = "/api/user/profile";
+module.exports.urlRefreshMyToken = "/api/refresh";
 module.exports.expirationTokens = { access: "30s", refresh: "1d" };

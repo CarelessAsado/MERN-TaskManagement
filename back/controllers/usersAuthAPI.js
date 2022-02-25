@@ -66,7 +66,7 @@ async function loginUsuario(req, res) {
         expiresIn: expirationTokens.access,
       });
       const refreshToken = jwt.sign(
-        { id: user._id },
+        { _id: user._id },
         process.env.JWT_REFRESH_SECRET,
         {
           expiresIn: expirationTokens.refresh,
