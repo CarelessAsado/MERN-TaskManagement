@@ -22,7 +22,7 @@ async function sendEmail(user, secretLinkToken) {
   try {
     const goldenLink =
       /*----------CREO Q ESTA URL TENDRIA Q SER EL FRONT EN REACT----*/
-      currentUrl + "/forgot-password/" + secretLinkToken + "/createPassword";
+      currentUrl + "/forgot-password/" + secretLinkToken + "/changePassword";
     let info = await transporter.sendMail({
       from: `"Rodrigo López" <${process.env.NODEMAIL}>`, // sender address
       to: "rodrigohernanlopez89@gmail.com, " + emailUsuario, //PONER MAIL DINAMICO DSP

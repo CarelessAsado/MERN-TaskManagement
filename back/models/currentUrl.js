@@ -1,5 +1,5 @@
 module.exports.currentUrl = process.env.NODE_ENV
-  ? "https://react-task-management.herokuapp.com"
+  ? "https://frosty-archimedes-bb3dfe.netlify.app/login"
   : "http://localhost:3000";
 /*----CAMBIAR AL FRONT CREO*/
 module.exports.urlAuthAPI = "/api/users/auth";
