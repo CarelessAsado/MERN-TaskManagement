@@ -31,7 +31,7 @@ const {
 } = require("./models/currentUrl");
 app.use(urlAuthAPI, usersAPI);
 /*----------------------*/
-const verifyToken = require("./middleware/authJWT");
+const { verifyToken } = require("./middleware/authJWT");
 app.use(verifyToken);
 
 const tareasAPI = require("./routes/tareasAPI");

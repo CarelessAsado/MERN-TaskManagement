@@ -6,10 +6,15 @@ const {
   forgotPassword,
   forgotPasswordCreateNew,
 } = require("../controllers/usersAuthAPI");
+const { verifyEmailLink } = require("../middleware/authJWT");
 
 router.post("/register", registerUsuario);
 router.post("/login", loginUsuario);
 router.post("/forgot-password/sendEmail", forgotPassword);
-router.put("/forgot-password/:id/changePassword", forgotPasswordCreateNew);
+router.put(
+  "/forgot-password/:secretLinkId/changePassword",
+  verifyEmailLink,
+  forgotPasswordCreateNew
+);
 
 module.exports = router;

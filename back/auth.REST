@@ -1,0 +1,24 @@
+
+@url = http://localhost:5000/api/users/auth
+###
+ 
+POST {{url}}/forgot-password/sendEmail
+content-type: application/json
+ 
+{
+    "contraseña": "123456",
+    "emailUsuario": "r@g.com"
+}
+ 
+###
+ 
+PUT {{url}}/forgot-password/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMTdmMDk0YWFjNzFiNjZiYjk0ZmE5OSIsImlhdCI6MTY0NTc1NjM1OSwiZXhwIjoxNjQ1ODQyNzU5fQ.I07CZ9fGJkA74k-OQ7Ir-pV4M7MOUbLGfBIdTm8yveA/changePassword
+content-type: application/json
+ 
+{
+    "contraseña": "123456",
+    "emailUsuario": "r@g.com",
+    "confirmaContraseña":"123"
+}
+ 
+###

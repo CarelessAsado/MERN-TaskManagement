@@ -5,24 +5,19 @@ const { TareaModel: Tarea } = require("../models/tareas");
 const bcrypt = require("bcrypt");
 /*-----JWT--------------*/
 const jwt = require("jsonwebtoken");
+/*----------------------------*/
+const validateUserInput = require("../middleware/customValidation");
 /*------NODEMAILER---------------*/
 const sendEmail = require("../middleware/nodemailer");
-const { currentUrl } = require("../models/currentUrl");
 
 async function registerUsuario(req, res) {
   try {
     const { emailUsuario, contraseña, confirmaContraseña, nombre } = req.body;
     /*---------------PRE VALIDATION------------------------*/
-    let errorString = "";
-    if (!emailUsuario || !confirmaContraseña || !contraseña || !nombre) {
-      errorString += "No puede haber campos vacíos. ";
-    }
-    if (contraseña && (contraseña.length < 6 || contraseña.length > 15)) {
-      errorString += "La contraseña debe tener entre 6 y 15 carácteres. ";
-    }
-    if (contraseña && confirmaContraseña != contraseña) {
-      errorString += "Las contraseñas no condicen. ";
-    }
+    const errorString = validateUserInput(
+      { emailUsuario, contraseña, confirmaContraseña, nombre },
+      "register"
+    );
     if (errorString) {
       return res.status(400).json(errorString);
     }
@@ -82,7 +77,6 @@ async function loginUsuario(req, res) {
 /*----SEND ME AN EMAIL*/
 async function forgotPassword(req, res) {
   const { emailUsuario } = req.body;
-  console.log(emailUsuario);
   if (!emailUsuario) {
     return res.status(400).json("No puede haber campos vacíos");
   }
@@ -94,18 +88,11 @@ async function forgotPassword(req, res) {
         .status(401)
         .json("No existe un usuario registrado con esa información.");
     }
-    console.log(currentUrl, "VER SI APARECE LOCALHHHHHOST");
-    await sendEmail(user);
-    console.log("pos funcion sendemail");
-    /*---------generate token with id an email----------*/
-    const accessToken = jwt.sign(
-      { id: user._id, emailUsuario: user.emailUsuario },
-      process.env.JWT_SECRET,
-      {
-        expiresIn: "1h",
-      }
-    );
-
+    /*----MAGIA JWT--------------*/
+    const secretLinkToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: 86400,
+    }); //CAMBIAR EL EXPIRATION TIME
+    await sendEmail(user, secretLinkToken);
     return res
       .status(200)
       .json(
@@ -115,13 +102,25 @@ async function forgotPassword(req, res) {
     res.status(500).json(error.message);
   }
 }
-function forgotPasswordCreateNew(req, res) {
-  console.log(req.params);
-  console.log(req.body, "BODY");
+async function forgotPasswordCreateNew(req, res) {
+  const userToUpdatePwd = await User.findById({ _id: req.userChangingPwd });
+  if (!userToUpdatePwd) {
+    return res.status(404).json("No existe el usuario.");
+  }
+  const { contraseña, confirmaContraseña } = req.body;
+  /*-----VALIDAR contraseña*/ //********************* */
+  const errorString = validateUserInput({ contraseña, confirmaContraseña });
+  if (errorString) {
+    return res.status(400).json(errorString);
+  }
+
   try {
-    res.json("hola");
+    let passHashed = await bcrypt.hash(contraseña, 10);
+    userToUpdatePwd.contraseña = passHashed;
+    const nuevoUsuario = await userToUpdatePwd.save();
+    return res.status(201).json("Se realizó el cambio exitosamente.");
   } catch (error) {
-    console.log(error);
+    res.status(500).json(error.message);
   }
 }
 module.exports = {

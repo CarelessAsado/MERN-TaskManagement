@@ -1,8 +1,9 @@
 const nodemailer = require("nodemailer");
 const { currentUrl, urlAuthAPI } = require("../models/currentUrl");
 
-async function sendEmail(user) {
+async function sendEmail(user, secretLinkToken) {
   const { emailUsuario, nombre } = user;
+  console.log(secretLinkToken, "adentro");
   // create reusable transporter object using the default SMTP transport
   let transporter = nodemailer.createTransport({
     host: "smtppro.zoho.com",
@@ -21,7 +22,7 @@ async function sendEmail(user) {
   try {
     const goldenLink =
       /*----------CREO Q ESTA URL TENDRIA Q SER EL FRONT EN REACT----*/
-      currentUrl + "/forgot-password/" + user._id + "/createPassword";
+      currentUrl + "/forgot-password/" + secretLinkToken + "/createPassword";
     let info = await transporter.sendMail({
       from: `"Rodrigo López" <${process.env.NODEMAIL}>`, // sender address
       to: "rodrigohernanlopez89@gmail.com, " + emailUsuario, //PONER MAIL DINAMICO DSP
