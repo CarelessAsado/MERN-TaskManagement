@@ -32,7 +32,6 @@ async function refreshMyToken(req, res) {
             expiresIn: expirationTokens.access,
           }
         );
-        console.log(accessToken);
         return res.status(200).json({ accessToken });
       }
     );
