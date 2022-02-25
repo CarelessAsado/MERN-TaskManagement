@@ -9,6 +9,7 @@ const jwt = require("jsonwebtoken");
 const validateUserInput = require("../middleware/customValidation");
 /*------NODEMAILER---------------*/
 const sendEmail = require("../middleware/nodemailer");
+const { expirationTokens } = require("../models/currentUrl");
 
 async function registerUsuario(req, res) {
   try {
@@ -62,7 +63,19 @@ async function loginUsuario(req, res) {
     if (await bcrypt.compare(contraseña, user.contraseña)) {
       /*----MAGIA JWT--------------*/
       const accessToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-        expiresIn: 86400,
+        expiresIn: expirationTokens.access,
+      });
+      const refreshToken = jwt.sign(
+        { id: user._id },
+        process.env.JWT_REFRESH_SECRET,
+        {
+          expiresIn: expirationTokens.refresh,
+        }
+      );
+      /*----Creo q hay q borrar la cookie al loguear out*/
+      res.cookie("jwtRefreshToken", refreshToken, {
+        httpOnly: true,
+        maxAge: 24 * 60 * 60 * 1000,
       });
       const { contraseña, tareas, ...rest } = user._doc;
       return res.status(200).json({ accessToken, ...rest });
