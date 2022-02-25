@@ -11,7 +11,6 @@ const TareaSchema = new mongoose.Schema({
     default: Date.now,
     /*---------VER COMO ADAPTARLO A HORARIO ARGENTINO*/
   },
-  //Debería ponerle owner:user?
 });
 
 const TareaModel = mongoose.model("Tarea", TareaSchema);

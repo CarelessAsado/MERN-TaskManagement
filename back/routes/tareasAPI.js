@@ -9,7 +9,7 @@ const {
 
 router.get("/", getAllTareas);
 router.post("/", guardarTarea);
-router.delete("/:id", borrarTarea);
-router.patch("/:id", actualizarTarea);
+router.delete("/:taskId", borrarTarea);
+router.patch("/:taskId", actualizarTarea);
 
 module.exports = router;

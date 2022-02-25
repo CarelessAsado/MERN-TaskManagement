@@ -36,7 +36,7 @@ async function getAllTareas(req, res) {
 }
 
 async function borrarTarea(req, res) {
-  const { id } = req.params;
+  const { taskId: id } = req.params;
   try {
     const user = await User.findOne({ "tareas._id": id });
     if (user._id != req.user) {
@@ -52,12 +52,13 @@ async function borrarTarea(req, res) {
 }
 
 async function actualizarTarea(req, res) {
-  const { id } = req.params;
+  const { taskId: id } = req.params;
   try {
     const user = await User.findOne({ "tareas._id": id });
-    let tareaUpdated = {};
     if (user._id != req.user) {
-      return res.status(403).json("No estás autorizado.");
+      return res
+        .status(403)
+        .json("No estás autorizado a modificar las tareas de otro usuario.");
     }
     user.tareas.forEach((item) => {
       if (item._id == id) {
@@ -67,7 +68,7 @@ async function actualizarTarea(req, res) {
       }
     });
     await user.save();
-    res.status(200).json(tareaUpdated);
+    res.sendStatus(200);
   } catch (error) {
     res.status(500).json(error);
   }

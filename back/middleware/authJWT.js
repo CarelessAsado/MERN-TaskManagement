@@ -9,6 +9,7 @@ function verifyToken(req, res, next) {
     if (err) {
       return res.status(403).send("El token no es válido.");
     }
+    /*-----Esta el mail tmb pero no lo uso, agregar dsp roles*/
     req.user = user.id;
     next();
   });
