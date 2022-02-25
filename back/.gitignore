@@ -24,3 +24,4 @@ yarn-debug.log*
 yarn-error.log*
 profile.REST
 .REST
+auth.REST
