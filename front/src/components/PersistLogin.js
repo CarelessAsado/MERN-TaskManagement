@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
+import { setHeadersPostLogin } from "../API/url";
 import { actions } from "../Context/reducer";
 import { useGlobalContext } from "../Hooks/useGlobalContext";
 
@@ -18,6 +19,7 @@ export const PersistLogin = () => {
         if (user) {
           /*  actualizar el state dsp */
           dispatch({ type: actions.LOGIN, payload: user });
+          setHeadersPostLogin(user.accessToken);
           return setLoading(false);
         }
         setLoading(false);

@@ -1,5 +1,5 @@
 import { actions } from "../Context/reducer";
-import axios, { axiosPRELogin } from "./url";
+import { axiosPRELogin, setHeadersPostLogin } from "./url";
 import { tareasAPI } from "./tareasAPI";
 const url = "users/auth";
 export const registerPost = async (usuario, dispatch, navigate, setSuccess) => {
@@ -20,7 +20,7 @@ export const loginPost = async (usuario, dispatch, navigate) => {
     /*-------------PONER TOKEN DINAMICAMENTE--------------*/
     dispatch({ type: actions.LOGIN, payload: data });
     localStorage.setItem("user", JSON.stringify(data));
-    axios.defaults.headers["auth"] = data.accessToken;
+    setHeadersPostLogin(data.accessToken);
     navigate("/");
   } catch (error) {
     tareasAPI.logErrorAPI(error, dispatch, "LOGIN");
@@ -29,7 +29,7 @@ export const loginPost = async (usuario, dispatch, navigate) => {
 export const logout = async (dispatch, navigate) => {
   dispatch({ type: actions.LOGOUT });
   localStorage.removeItem("user");
-  axios.defaults.headers["auth"] = "";
+  setHeadersPostLogin("");
   console.log("Navegando hacia el espacio");
   navigate("login");
 };

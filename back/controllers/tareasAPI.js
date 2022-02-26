@@ -18,7 +18,7 @@ async function guardarTarea(req, res) {
         return res.status(400).json(errors);
       }
     } else {
-      res.status(500).json(error);
+      res.status(500).json(error.message);
     }
   }
 }
@@ -31,7 +31,8 @@ async function getAllTareas(req, res) {
     );
     res.status(200).json(tareasTodas);
   } catch (error) {
-    res.status(500).json(error);
+    console.log(error);
+    res.status(500).json(error.message);
   }
 }
 
@@ -47,7 +48,7 @@ async function borrarTarea(req, res) {
     await user.save();
     return res.sendStatus(200);
   } catch (error) {
-    res.status(500).json(error);
+    res.status(500).json(error.message);
   }
 }
 
@@ -70,7 +71,7 @@ async function actualizarTarea(req, res) {
     await user.save();
     res.sendStatus(200);
   } catch (error) {
-    res.status(500).json(error);
+    res.status(500).json(error.message);
   }
 }
 module.exports = { guardarTarea, getAllTareas, borrarTarea, actualizarTarea };

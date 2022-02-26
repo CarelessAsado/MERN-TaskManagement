@@ -61,12 +61,11 @@ export const tareasAPI = {
   actualizarTarea: async function (id, itemAActualizar, dispatch) {
     dispatch({ type: actions.START_ACTION });
     try {
-      let { data } = await axios.patch(
+      await axios.patch(
         url + `/${id}`,
 
         itemAActualizar
       );
-      console.log(data, "ver si esta el objeto");
       dispatch({ type: actions.UPDATE, payload: { ...itemAActualizar, id } });
       return;
     } catch (error) {

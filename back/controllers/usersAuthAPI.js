@@ -62,7 +62,7 @@ async function loginUsuario(req, res) {
 
     if (await bcrypt.compare(contraseña, user.contraseña)) {
       /*----MAGIA JWT--------------*/
-      const accessToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      const accessToken = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
         expiresIn: expirationTokens.access,
       });
       const refreshToken = jwt.sign(
@@ -102,9 +102,13 @@ async function forgotPassword(req, res) {
         .json("No existe un usuario registrado con esa información.");
     }
     /*----MAGIA JWT--------------*/
-    const secretLinkToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: 86400,
-    }); //CAMBIAR EL EXPIRATION TIME
+    const secretLinkToken = jwt.sign(
+      { _id: user._id },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: 86400,
+      }
+    ); //CAMBIAR EL EXPIRATION TIME
     await sendEmail(user, secretLinkToken);
     return res
       .status(200)
