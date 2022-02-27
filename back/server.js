@@ -4,9 +4,17 @@ require("dotenv").config();
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 
+/*----URLs models--------*/
+const {
+  urlAuthAPI,
+  urlTareasAPI,
+  urlUserProfileAPI,
+  urlRefreshMyToken,
+  currentUrl,
+} = require("./models/currentUrl");
 app.use(
   cors({
-    origin: ["http://localhost:3000"],
+    origin: [currentUrl],
     credentials: true,
     /*  exposedHeaders: ["set-cookie"], */ //creo q no ayuda
   })
@@ -31,13 +39,6 @@ function connectServer() {
 }
 /*--------------------------ROUTES---------------*/
 
-/*----URLs models--------*/
-const {
-  urlAuthAPI,
-  urlTareasAPI,
-  urlUserProfileAPI,
-  urlRefreshMyToken,
-} = require("./models/currentUrl");
 /*UNPROTECTED------------------------*/
 const authAPI = require("./routes/usersAuthAPI");
 app.use(urlAuthAPI, authAPI);
