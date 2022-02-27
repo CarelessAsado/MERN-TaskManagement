@@ -16,7 +16,7 @@ function verifyToken(req, res, next) {
 }
 /*-------------------------------VERIFICACION DE TOKEN EN CASO
                             DE OLVIDARSE EL PASSWORD Y Q MANDAMOS EL 
-                            SECRETLINK*/
+                            SECRETLINK----------------------------------------------------------------*/
 function verifyEmailLink(req, res, next) {
   const { secretLinkId: secretLink } = req.params;
   if (!secretLink) {

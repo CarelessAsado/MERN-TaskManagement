@@ -12,6 +12,7 @@ const {
   urlRefreshMyToken,
   currentUrl,
 } = require("./models/currentUrl");
+/*-----------------CORS and general---------------*/
 app.use(
   cors({
     origin: [currentUrl],
