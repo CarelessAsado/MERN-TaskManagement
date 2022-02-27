@@ -1,7 +1,12 @@
 import { actions } from "../Context/reducer";
-import { axiosPRELogin, setHeadersPostLogin } from "./url";
+import axiosPOSTLogin, {
+  axiosPRELogin,
+  setHeadersPostLogin,
+  urlPathModel,
+} from "./url";
 import { tareasAPI } from "./tareasAPI";
-const url = "users/auth";
+
+const url = urlPathModel.AUTH;
 export const registerPost = async (usuario, dispatch, navigate, setSuccess) => {
   try {
     await axiosPRELogin.post(url + "/register", usuario);
@@ -20,21 +25,30 @@ export const loginPost = async (usuario, dispatch, navigate) => {
       withCredentials: true,
     });
     /*-------------PONER TOKEN DINAMICAMENTE--------------*/
-    dispatch({ type: actions.LOGIN, payload: data });
+    const { accessToken, ...remaining } = data;
+
+    dispatch({ type: actions.LOGIN, payload: remaining });
     /*-------------ver si pongo useEffect pal local storage*/
-    localStorage.setItem("user", JSON.stringify(data));
-    setHeadersPostLogin(data.accessToken);
+    localStorage.setItem("user", JSON.stringify(remaining));
+    setHeadersPostLogin(accessToken);
     navigate("/");
   } catch (error) {
     tareasAPI.logErrorAPI(error, dispatch, "LOGIN");
   }
 };
+/*-------------------ACA YA USO AXIOS INSTANCE POSTLOGIN--------*/
 export const logout = async (dispatch, navigate) => {
-  dispatch({ type: actions.LOGOUT });
-  localStorage.removeItem("user");
-  setHeadersPostLogin("");
-  console.log("Navegando hacia el espacio");
-  navigate("login");
+  try {
+    dispatch({ type: actions.START_ACTION });
+    await axiosPOSTLogin.get(url + "/logout");
+    dispatch({ type: actions.LOGOUT });
+    /*---ver de usar useEffect para el local storage*/
+    localStorage.removeItem("user");
+    setHeadersPostLogin("");
+    navigate("/login");
+  } catch (error) {
+    tareasAPI.logErrorAPI(error, dispatch, "LOGOUT");
+  }
 };
 
 /*---------------------FORGOT PASSWORD-----------------------*/

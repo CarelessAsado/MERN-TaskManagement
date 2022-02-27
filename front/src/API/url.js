@@ -13,6 +13,8 @@ const axiosPOSTLogin = axios.create({
   withCredentials: true,
 });
 export default axiosPOSTLogin;
+/*-------------------PATH MODEL------------*/
+export const urlPathModel = { AUTH: "users/auth" };
 /*----------------ver si esto lo meto en hook------------------------------------------*/
 export const headersAccessTokenString = "auth";
 export function setHeadersPostLogin(accessToken) {

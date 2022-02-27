@@ -47,7 +47,14 @@ async function registerUsuario(req, res) {
     }
   }
 }
-
+async function logOUTUsuario(req, res) {
+  res.clearCookie("jwtRefreshToken", {
+    httpOnly: true,
+    sameSite: "None",
+    secure: true,
+  });
+  return res.status(200).json("Logout successful.");
+}
 async function loginUsuario(req, res) {
   const { emailUsuario, contraseña } = req.body;
   if (!emailUsuario || !contraseña) {
@@ -147,6 +154,7 @@ async function forgotPasswordCreateNew(req, res) {
 module.exports = {
   registerUsuario,
   loginUsuario,
+  logOUTUsuario,
   forgotPassword,
   forgotPasswordCreateNew,
 };

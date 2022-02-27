@@ -18,8 +18,9 @@ export const PersistLogin = () => {
         );
         if (user) {
           /*  actualizar el state dsp */
-          dispatch({ type: actions.LOGIN, payload: user });
-          setHeadersPostLogin(user.accessToken);
+          const { accessToken, ...remaining } = user;
+          dispatch({ type: actions.LOGIN, payload: remaining });
+          setHeadersPostLogin(accessToken);
           return setLoading(false);
         }
         setLoading(false);

@@ -26,6 +26,9 @@ const User = new mongoose.Schema({
     lowercase: true,
     maxlength: [15, "No puede exceder de 15 caracteres el nombre."],
   },
+  refreshToken: {
+    type: String,
+  },
   tareas: [TareaSchema],
 });
 

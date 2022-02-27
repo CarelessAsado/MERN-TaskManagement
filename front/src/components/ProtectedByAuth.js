@@ -4,7 +4,7 @@ import { useGlobalContext } from "../Hooks/useGlobalContext";
 export const ProtectedByAuth = () => {
   const { user } = useGlobalContext();
   const location = useLocation();
-  console.log("PROTECTED BY AUTH");
+  console.log("PROTECTED BY AUTH, after persist component");
   return user ? (
     <Outlet></Outlet>
   ) : (
