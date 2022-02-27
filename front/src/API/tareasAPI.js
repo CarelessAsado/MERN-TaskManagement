@@ -4,7 +4,7 @@ const url = "tareas";
 export const tareasAPI = {
   logErrorAPI: function (error, dispatch, etapa) {
     console.log(
-      error.response.data,
+      error.response?.data,
       JSON.stringify(error),
       "hubo un error estamos el logERROR API. Sector: " + etapa
     );
@@ -17,7 +17,7 @@ export const tareasAPI = {
         payload: "Hubo un problema en la conexión.",
       });
     }
-    dispatch({ type: actions.FAILURE_ACTION, payload: error.response.data });
+    dispatch({ type: actions.FAILURE_ACTION, payload: error?.response?.data });
   },
   fetchTareasTodas: async function (dispatch) {
     try {

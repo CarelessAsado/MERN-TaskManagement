@@ -76,7 +76,10 @@ async function loginUsuario(req, res) {
       res.cookie("jwtRefreshToken", refreshToken, {
         httpOnly: true,
         maxAge: 24 * 60 * 60 * 1000,
+        sameSite: "None",
+        secure: true,
       });
+
       const { contraseña, tareas, ...rest } = user._doc;
       return res.status(200).json({ accessToken, ...rest });
     } else {

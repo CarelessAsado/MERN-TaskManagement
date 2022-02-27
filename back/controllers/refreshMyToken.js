@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken");
 const { expirationTokens } = require("../models/currentUrl");
 async function refreshMyToken(req, res) {
   const cookies = req.cookies;
+  console.log(req.cookies, "VER SI SE NECESITA TRUE NO SE QUES");
   if (!cookies?.jwtRefreshToken) {
     return res.status(401).json("El refresh token no existe.");
   }

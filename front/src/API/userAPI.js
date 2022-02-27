@@ -16,9 +16,12 @@ export const registerPost = async (usuario, dispatch, navigate, setSuccess) => {
 export const loginPost = async (usuario, dispatch, navigate) => {
   dispatch({ type: actions.START_ACTION });
   try {
-    const { data } = await axiosPRELogin.post(url + "/login", usuario);
+    const { data } = await axiosPRELogin.post(url + "/login", usuario, {
+      withCredentials: true,
+    });
     /*-------------PONER TOKEN DINAMICAMENTE--------------*/
     dispatch({ type: actions.LOGIN, payload: data });
+    /*-------------ver si pongo useEffect pal local storage*/
     localStorage.setItem("user", JSON.stringify(data));
     setHeadersPostLogin(data.accessToken);
     navigate("/");

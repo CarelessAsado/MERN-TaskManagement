@@ -3,10 +3,18 @@ const app = express();
 require("dotenv").config();
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
-app.use(cors());
+
+app.use(
+  cors({
+    origin: ["http://localhost:3000"],
+    credentials: true,
+    /*  exposedHeaders: ["set-cookie"], */ //creo q no ayuda
+  })
+);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+
 const port = process.env.PORT || 5000;
 /*--------------------------------*/
 const connectDB = require("./db/connect");
