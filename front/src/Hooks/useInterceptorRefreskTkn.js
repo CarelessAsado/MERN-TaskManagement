@@ -9,7 +9,6 @@ export const useInterceptorRefreskTkn = () => {
       (response) => response,
       /*---le agrego async ya q voy a potencialmente llamar al refresh api*/
       async (error) => {
-        console.log(error.config);
         const previousRequest = error?.config;
         if (error?.response?.status === 403 && !previousRequest?.sent) {
           /*agrego una property nueva p/evitar un infinite loop*/
