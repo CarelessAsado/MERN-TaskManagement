@@ -13,6 +13,7 @@ import { ProtectedByAuth } from "./components/ProtectedByAuth";
 import { useEffect } from "react";
 import { useGlobalContext } from "./Hooks/useGlobalContext";
 import { actions } from "./Context/reducer";
+import { useInterceptorRefreskTkn } from "./Hooks/useInterceptorRefreskTkn";
 
 function App() {
   /*----------------RESET ERRORS ON NAVIGATION*/
@@ -22,6 +23,7 @@ function App() {
     dispatch({ type: actions.CLEAR_ERRORS });
   }, [location.pathname, dispatch]);
   /*-----------------------------------------*/
+  useInterceptorRefreskTkn();
 
   return (
     <div className="App">

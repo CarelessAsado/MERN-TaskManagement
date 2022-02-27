@@ -4,7 +4,7 @@ const url = "tareas";
 export const tareasAPI = {
   logErrorAPI: function (error, dispatch, etapa) {
     console.log(
-      error.response?.data,
+      error?.response?.data,
       JSON.stringify(error),
       "hubo un error estamos el logERROR API. Sector: " + etapa
     );

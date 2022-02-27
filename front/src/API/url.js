@@ -14,14 +14,15 @@ const axiosPOSTLogin = axios.create({
 });
 export default axiosPOSTLogin;
 /*----------------ver si esto lo meto en hook------------------------------------------*/
+export const headersAccessTokenString = "auth";
 export function setHeadersPostLogin(accessToken) {
-  axiosPOSTLogin.defaults.headers["auth"] = accessToken; //en caso de Logout paso empty string
+  axiosPOSTLogin.defaults.headers[headersAccessTokenString] = accessToken; //en caso de Logout paso empty string
 }
-axiosPOSTLogin.interceptors.request.use(
+/* axiosPOSTLogin.interceptors.request.use(
   (config) => {
     return config;
   },
   function (error) {
     return Promise.reject(error);
   }
-);
+); */

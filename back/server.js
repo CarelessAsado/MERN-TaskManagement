@@ -17,7 +17,6 @@ app.use(
   cors({
     origin: [currentUrl],
     credentials: true,
-    /*  exposedHeaders: ["set-cookie"], */ //creo q no ayuda
   })
 );
 app.use(express.json());
