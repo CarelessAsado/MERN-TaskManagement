@@ -20,11 +20,3 @@ export const headersAccessTokenString = "auth";
 export function setHeadersPostLogin(accessToken) {
   axiosPOSTLogin.defaults.headers[headersAccessTokenString] = accessToken; //en caso de Logout paso empty string
 }
-/* axiosPOSTLogin.interceptors.request.use(
-  (config) => {
-    return config;
-  },
-  function (error) {
-    return Promise.reject(error);
-  }
-); */

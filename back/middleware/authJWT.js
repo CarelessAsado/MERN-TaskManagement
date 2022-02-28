@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 function verifyToken(req, res, next) {
   const authHeader = req.headers.auth;
+  console.log(authHeader, req.url);
   if (!authHeader) {
     return res.status(401).send("No estás autorizado.");
   }

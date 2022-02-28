@@ -4,6 +4,7 @@ import axiosPOSTLogin, { headersAccessTokenString } from "../API/url";
 import { useGlobalContext } from "./useGlobalContext";
 export const useInterceptorRefreskTkn = () => {
   const { dispatch } = useGlobalContext();
+
   useEffect(() => {
     const responseInterceptor = axiosPOSTLogin.interceptors.response.use(
       (response) => response,
@@ -19,7 +20,9 @@ export const useInterceptorRefreskTkn = () => {
           previousRequest.headers[headersAccessTokenString] = data.accessToken;
           return axiosPOSTLogin(previousRequest);
         }
-
+        /*     if (error?.response?.status === 401) {
+          return navigate("/login");
+        } */
         return Promise.reject(error);
       }
     );
@@ -27,7 +30,7 @@ export const useInterceptorRefreskTkn = () => {
     return () => {
       axiosPOSTLogin.interceptors.response.eject(responseInterceptor);
     };
-  }, []);
+  }, [dispatch]);
 
   return undefined;
 };

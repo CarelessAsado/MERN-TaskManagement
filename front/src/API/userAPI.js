@@ -25,11 +25,11 @@ export const loginPost = async (usuario, dispatch, navigate) => {
       withCredentials: true,
     });
     /*-------------PONER TOKEN DINAMICAMENTE--------------*/
-    const { accessToken, ...remaining } = data;
+    const { accessToken } = data;
 
-    dispatch({ type: actions.LOGIN, payload: remaining });
+    dispatch({ type: actions.LOGIN, payload: data });
     /*-------------ver si pongo useEffect pal local storage*/
-    localStorage.setItem("user", JSON.stringify(remaining));
+    localStorage.setItem("user", JSON.stringify(data));
     setHeadersPostLogin(accessToken);
     navigate("/");
   } catch (error) {

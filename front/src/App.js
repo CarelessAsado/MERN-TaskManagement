@@ -24,6 +24,7 @@ function App() {
   }, [location.pathname, dispatch]);
   /*-----------------------------------------*/
   useInterceptorRefreskTkn();
+  /*-------------------------------------------*/
 
   return (
     <div className="App">
