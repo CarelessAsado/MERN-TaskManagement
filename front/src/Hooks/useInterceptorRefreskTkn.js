@@ -1,10 +1,8 @@
 import { useEffect } from "react";
-import { refreshTokenAPI } from "../API/refreshTokenAPI";
 import axiosPOSTLogin, { headersAccessTokenString } from "../API/url";
-import { useGlobalContext } from "./useGlobalContext";
+import { useRefreshToken } from "./useRefreshToken";
 export const useInterceptorRefreskTkn = () => {
-  const { dispatch } = useGlobalContext();
-
+  const refresh = useRefreshToken();
   useEffect(() => {
     const responseInterceptor = axiosPOSTLogin.interceptors.response.use(
       (response) => response,
@@ -15,7 +13,7 @@ export const useInterceptorRefreskTkn = () => {
           /*agrego una property nueva p/evitar un infinite loop*/
           previousRequest.sent = true;
 
-          const data = await refreshTokenAPI.refreshToken(dispatch);
+          const data = await refresh();
           /*----no sirve usar la funcion de setHeaders aca, hay q devolver si o si la instance con los headers modificados en el config*/
           previousRequest.headers[headersAccessTokenString] = data.accessToken;
           return axiosPOSTLogin(previousRequest);
@@ -30,7 +28,7 @@ export const useInterceptorRefreskTkn = () => {
     return () => {
       axiosPOSTLogin.interceptors.response.eject(responseInterceptor);
     };
-  }, [dispatch]);
+  }, [refresh]);
 
   return undefined;
 };
