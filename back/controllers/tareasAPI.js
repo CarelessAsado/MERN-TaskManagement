@@ -1,3 +1,4 @@
+const errorWrapper = require("../ERRORS/errorWrapper");
 const { TareaModel: Tarea } = require("../models/tareas");
 const User = require("../models/User");
 
@@ -23,55 +24,42 @@ async function guardarTarea(req, res) {
   }
 }
 
-async function getAllTareas(req, res) {
-  try {
-    const { tareas: tareasTodas } = await User.findById(
-      { _id: req.user },
-      "tareas"
-    );
-    res.status(200).json(tareasTodas);
-  } catch (error) {
-    console.log(error);
-    res.status(500).json(error.message);
-  }
-}
+const getAllTareas = errorWrapper(async function (req, res) {
+  const { tareas: tareasTodas } = await User.findById(
+    { _id: req.user },
+    "tareas"
+  );
+  res.status(200).json(tareasTodas);
+});
 
-async function borrarTarea(req, res) {
+const borrarTarea = errorWrapper(async function (req, res) {
   const { taskId: id } = req.params;
-  try {
-    const user = await User.findOne({ "tareas._id": id });
-    if (user._id != req.user) {
-      return res.status(403).json("No estás autorizado.");
-    }
-    let tareasAGuardar = user.tareas.filter((item) => item._id != id);
-    user.tareas = tareasAGuardar;
-    await user.save();
-    return res.sendStatus(200);
-  } catch (error) {
-    res.status(500).json(error.message);
+  const user = await User.findOne({ "tareas._id": id });
+  if (user._id != req.user) {
+    return res.status(403).json("No estás autorizado.");
   }
-}
+  let tareasAGuardar = user.tareas.filter((item) => item._id != id);
+  user.tareas = tareasAGuardar;
+  await user.save();
+  return res.sendStatus(200);
+});
 
-async function actualizarTarea(req, res) {
+const actualizarTarea = errorWrapper(async function (req, res) {
   const { taskId: id } = req.params;
-  try {
-    const user = await User.findOne({ "tareas._id": id });
-    if (user._id != req.user) {
-      return res
-        .status(403)
-        .json("No estás autorizado a modificar las tareas de otro usuario.");
-    }
-    user.tareas.forEach((item) => {
-      if (item._id == id) {
-        for (let key in req.body) {
-          item[key] = req.body[key];
-        }
+  const user = await User.findOne({ "tareas._id": id });
+  if (user._id != req.user) {
+    return res
+      .status(403)
+      .json("No estás autorizado a modificar las tareas de otro usuario.");
+  }
+  user.tareas.forEach((item) => {
+    if (item._id == id) {
+      for (let key in req.body) {
+        item[key] = req.body[key];
       }
-    });
-    await user.save();
-    res.sendStatus(200);
-  } catch (error) {
-    res.status(500).json(error.message);
-  }
-}
+    }
+  });
+  await user.save();
+  res.sendStatus(200);
+});
 module.exports = { guardarTarea, getAllTareas, borrarTarea, actualizarTarea };
