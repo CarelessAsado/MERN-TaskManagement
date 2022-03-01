@@ -16,12 +16,8 @@ class ForbiddenError extends CustomError {
     this.statusCode = 403;
   }
 }
-function createCustomError(msg, code) {
-  return new CustomError(msg, code);
-}
 
 module.exports = {
-  createCustomError,
   CustomError,
   UnauthorizedError,
   ForbiddenError,

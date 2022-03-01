@@ -1,28 +1,15 @@
+const { ForbiddenError } = require("../ERRORS/CustomError");
 const errorWrapper = require("../ERRORS/errorWrapper");
 const { TareaModel: Tarea } = require("../models/tareas");
 const User = require("../models/User");
 
-async function guardarTarea(req, res) {
-  try {
-    const todasTareas = await User.findById({ _id: req.user }, "tareas");
-    let nuevaTarea = new Tarea(req.body);
-    todasTareas.tareas.push(nuevaTarea);
-    await todasTareas.save();
-    res.status(201).json(nuevaTarea);
-  } catch (error) {
-    console.log(error.errors);
-    if (error.name == "ValidationError") {
-      let errors = Object.values(error.errors).map((val) => val.message);
-      if (errors.length > 1) {
-        return res.status(400).json(errors.join(" "));
-      } else {
-        return res.status(400).json(errors);
-      }
-    } else {
-      res.status(500).json(error.message);
-    }
-  }
-}
+const guardarTarea = errorWrapper(async function (req, res) {
+  const todasTareas = await User.findById({ _id: req.user }, "tareas");
+  let nuevaTarea = new Tarea(req.body);
+  todasTareas.tareas.push(nuevaTarea);
+  await todasTareas.save();
+  res.status(201).json(nuevaTarea);
+});
 
 const getAllTareas = errorWrapper(async function (req, res) {
   const { tareas: tareasTodas } = await User.findById(
@@ -32,11 +19,11 @@ const getAllTareas = errorWrapper(async function (req, res) {
   res.status(200).json(tareasTodas);
 });
 
-const borrarTarea = errorWrapper(async function (req, res) {
+const borrarTarea = errorWrapper(async function (req, res, next) {
   const { taskId: id } = req.params;
   const user = await User.findOne({ "tareas._id": id });
   if (user._id != req.user) {
-    return res.status(403).json("No estás autorizado.");
+    return next(new ForbiddenError("No estás autorizado."));
   }
   let tareasAGuardar = user.tareas.filter((item) => item._id != id);
   user.tareas = tareasAGuardar;
@@ -48,9 +35,11 @@ const actualizarTarea = errorWrapper(async function (req, res) {
   const { taskId: id } = req.params;
   const user = await User.findOne({ "tareas._id": id });
   if (user._id != req.user) {
-    return res
-      .status(403)
-      .json("No estás autorizado a modificar las tareas de otro usuario.");
+    return next(
+      new ForbiddenError(
+        "No estás autorizado a modificar las tareas de otro usuario."
+      )
+    );
   }
   user.tareas.forEach((item) => {
     if (item._id == id) {
