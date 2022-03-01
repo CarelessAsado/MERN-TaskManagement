@@ -1,3 +1,6 @@
+import { useEffect } from "react";
+import { useGlobalContext } from "./Hooks/useGlobalContext";
+import { actions } from "./Context/reducer";
 import "./App.css";
 import { Routes, Route, useLocation } from "react-router-dom";
 
@@ -10,9 +13,6 @@ import { ForgotChangePassword } from "./pages/ForgotChangePassword";
 /*----------JWT RELATED-----------------*/
 import { PersistLogin } from "./components/PersistLogin";
 import { ProtectedByAuth } from "./components/ProtectedByAuth";
-import { useEffect } from "react";
-import { useGlobalContext } from "./Hooks/useGlobalContext";
-import { actions } from "./Context/reducer";
 import { useInterceptorRefreskTkn } from "./Hooks/useInterceptorRefreskTkn";
 
 function App() {
@@ -37,6 +37,7 @@ function App() {
               <Route path="/profile/:userId" element={<UserProfile />}></Route>
             </Route>
           </Route>
+
           {/* NON PROTECTED ROUTES */}
           <Route path="/register" element={<RegisterOrLogin />}></Route>
           <Route path="/login" element={<RegisterOrLogin />}></Route>
