@@ -1,9 +1,13 @@
+const { ForbiddenError } = require("../ERRORS/CustomError");
+
 function isUserOwner(req, res, next) {
   console.log(req.user, req.params.id, "estamos chequeando ownership");
   if (req.user !== req.params.id) {
-    return res
-      .status(401)
-      .json("No tenés acceso a esa información. Pertenece a otro usuario.");
+    return next(
+      new ForbiddenError(
+        "No tenés acceso a esa información. Pertenece a otro usuario."
+      )
+    );
   }
   next();
 }

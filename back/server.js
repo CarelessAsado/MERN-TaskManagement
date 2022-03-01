@@ -47,8 +47,8 @@ const refreshAPI = require("./routes/refreshMyToken");
 app.use(urlRefreshMyToken, refreshAPI);
 
 /*--PROTECTED-----------------*/
-/* const { verifyToken } = require("./middleware/authJWT");
-app.use(verifyToken); */
+const { verifyToken } = require("./middleware/authJWT");
+app.use(verifyToken);
 
 const tareasAPI = require("./routes/tareasAPI");
 app.use(urlTareasAPI, tareasAPI);

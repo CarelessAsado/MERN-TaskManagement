@@ -1,14 +1,18 @@
 const jwt = require("jsonwebtoken");
+const { ForbiddenError, UnauthorizedError } = require("../ERRORS/CustomError");
+
 function verifyToken(req, res, next) {
   const authHeader = req.headers.auth;
   console.log(authHeader, req.url);
   if (!authHeader) {
-    return res.status(401).send("No estás autorizado.");
+    return next(
+      new UnauthorizedError("No estás autorizado. No existe token de acceso.")
+    );
   }
   const token = authHeader;
   jwt.verify(token, process.env.JWT_SECRET, function (err, user) {
     if (err) {
-      return res.status(403).send("El token no es válido.");
+      return next(new ForbiddenError("El token de acceso no es válido."));
     }
     /*-----Esta el mail tmb pero no lo uso, agregar dsp roles*/
     req.user = user._id;
@@ -21,17 +25,17 @@ function verifyToken(req, res, next) {
 function verifyEmailLink(req, res, next) {
   const { secretLinkId: secretLink } = req.params;
   if (!secretLink) {
-    return res.status(401).send("No estás autorizado.");
+    return next(new UnauthorizedError("No estás autorizado."));
   }
   const token = secretLink;
   console.log(token, req.params, "SECRET LINK MIDDLEWARE CHEQUEANDO");
   jwt.verify(token, process.env.JWT_SECRET, function (err, user) {
     if (err) {
-      return res
-        .status(403)
-        .send(
+      return next(
+        new ForbiddenError(
           "El link no es válido. No se puede llevar a cabo el cambio de contraseña."
-        );
+        )
+      );
     }
     req.userChangingPwd = user._id;
     next();
