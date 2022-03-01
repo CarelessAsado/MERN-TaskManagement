@@ -1,6 +1,14 @@
 //IMPORTAR MODELO
 const User = require("../models/User");
 const { TareaModel: Tarea } = require("../models/tareas");
+//ERROR CLASSES
+const errorWrapper = require("../ERRORS/errorWrapper");
+const {
+  UnauthorizedError,
+  ForbiddenError,
+  CustomError,
+} = require("../ERRORS/CustomError");
+
 /*---BCRYPT----------*/
 const bcrypt = require("bcrypt");
 /*-----JWT--------------*/
@@ -10,9 +18,8 @@ const validateUserInput = require("../middleware/customValidation");
 /*------NODEMAILER---------------*/
 const sendEmail = require("../middleware/nodemailer");
 const { expirationTokens } = require("../models/currentUrl");
-const errorWrapper = require("../ERRORS/errorWrapper");
 
-const registerUsuario = errorWrapper(async function (req, res) {
+const registerUsuario = errorWrapper(async function (req, res, next) {
   const { emailUsuario, contraseña, confirmaContraseña, nombre } = req.body;
   /*---------------PRE VALIDATION------------------------*/
   const errorString = validateUserInput(
@@ -41,7 +48,7 @@ async function logOUTUsuario(req, res) {
   });
   return res.status(200).json("Logout successful.");
 }
-const loginUsuario = errorWrapper(async function (req, res) {
+const loginUsuario = errorWrapper(async function (req, res, next) {
   const { emailUsuario, contraseña } = req.body;
   if (!emailUsuario || !contraseña) {
     return res.status(400).json("No puede haber campos vacíos");
@@ -50,7 +57,7 @@ const loginUsuario = errorWrapper(async function (req, res) {
   let user = await User.findOne({ emailUsuario });
 
   if (!user) {
-    return res.status(401).json("Usuario o contraseña no coinciden.");
+    return next(new UnauthorizedError("Usuario o contraseña no coinciden."));
   }
 
   if (await bcrypt.compare(contraseña, user.contraseña)) {
@@ -76,12 +83,12 @@ const loginUsuario = errorWrapper(async function (req, res) {
     const { contraseña, tareas, ...rest } = user._doc;
     return res.status(200).json({ accessToken, ...rest });
   } else {
-    return res.status(401).json("Usuario o contraseña no coinciden.");
+    return next(new UnauthorizedError("Usuario o contraseña no coinciden."));
   }
 });
 /*-----------------------------------------FORGOT PASSWORD----------------------*/
 /*----SEND ME AN EMAIL*/
-const forgotPassword = errorWrapper(async function (req, res) {
+const forgotPassword = errorWrapper(async function (req, res, next) {
   const { emailUsuario } = req.body;
   if (!emailUsuario) {
     return res.status(400).json("No puede haber campos vacíos");
@@ -89,9 +96,11 @@ const forgotPassword = errorWrapper(async function (req, res) {
   let user = await User.findOne({ emailUsuario });
 
   if (!user) {
-    return res
-      .status(401)
-      .json("No existe un usuario registrado con esa información.");
+    return next(
+      new UnauthorizedError(
+        "No existe un usuario registrado con esa información."
+      )
+    );
   }
   /*----MAGIA JWT--------------*/
   const secretLinkToken = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
@@ -104,11 +113,11 @@ const forgotPassword = errorWrapper(async function (req, res) {
       "Revisá tu casilla de email para proseguir con el proceso de cambio de contraseña."
     );
 });
-const forgotPasswordCreateNew = errorWrapper(async function (req, res) {
+const forgotPasswordCreateNew = errorWrapper(async function (req, res, next) {
   console.log(req.userChangingPwd, "llegamos", req.body);
   const userToUpdatePwd = await User.findById({ _id: req.userChangingPwd });
   if (!userToUpdatePwd) {
-    return res.status(404).json("No existe el usuario.");
+    return next(new CustomError("No existe el usuario.", 404));
   }
   const { contraseña, confirmaContraseña } = req.body;
   /*-----VALIDAR contraseña*/ //********************* */
