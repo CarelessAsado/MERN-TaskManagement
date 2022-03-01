@@ -14,7 +14,7 @@ const axiosPOSTLogin = axios.create({
 });
 export default axiosPOSTLogin;
 /*-------------------PATH MODEL------------*/
-export const urlPathModel = { AUTH: "users/auth" };
+export const urlPathModel = { AUTH: "users/auth", REFRESH: "/refresh" };
 /*----------------ver si esto lo meto en hook------------------------------------------*/
 export const headersAccessTokenString = "auth";
 export function setHeadersPostLogin(accessToken) {

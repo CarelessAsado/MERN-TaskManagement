@@ -20,7 +20,7 @@ async function refreshMyToken(req, res) {
         if (error) {
           /*-------------OJO de no ponerle 403 xq sino hay endless loop*/
           /*---ver de armar custom property en este error asi puede poner un conditional en el back y distinguirlo, en vez de usar error .status 402*/
-          return res.status(402).json("El REFRESH token no es válido.");
+          return res.status(403).json("El REFRESH token no es válido.");
         }
         /*----MAGIA JWT--------------*/
         const accessToken = jwt.sign(

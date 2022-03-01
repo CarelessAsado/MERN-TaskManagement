@@ -1,9 +1,9 @@
-import axiosPOSTLogin from "./url";
+import axiosPOSTLogin, { urlPathModel } from "./url";
 
 export const refreshTokenAPI = {
   refreshToken: async () => {
     try {
-      const { data } = await axiosPOSTLogin.get("/refresh", {
+      const { data } = await axiosPOSTLogin.get(urlPathModel.REFRESH, {
         withCredentials: true,
       });
       /*------Actualizar headers*/

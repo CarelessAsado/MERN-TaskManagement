@@ -1,8 +1,16 @@
 import { useEffect } from "react";
-import axiosPOSTLogin, { headersAccessTokenString } from "../API/url";
+import { useNavigate } from "react-router-dom";
+import axiosPOSTLogin, {
+  headersAccessTokenString,
+  urlPathModel,
+} from "../API/url";
+import { logout } from "../API/userAPI";
+import { useGlobalContext } from "./useGlobalContext";
 import { useRefreshAPI } from "./useRefreshAPI";
 
 export const useInterceptorRefreskTkn = () => {
+  const { dispatch, deleteUserStorage } = useGlobalContext();
+  const navigate = useNavigate();
   const refresh = useRefreshAPI();
   useEffect(() => {
     const responseInterceptor = axiosPOSTLogin.interceptors.response.use(
@@ -16,7 +24,7 @@ export const useInterceptorRefreskTkn = () => {
         if (
           error?.response?.status === 403 &&
           !previousRequest?.sent &&
-          error.config.url !== "/refresh"
+          error.config.url !== urlPathModel.REFRESH
         ) {
           /*agrego una property nueva p/evitar un infinite loop*/
           previousRequest.sent = true;
@@ -30,6 +38,13 @@ export const useInterceptorRefreskTkn = () => {
           }
           return axiosPOSTLogin(previousRequest);
         }
+        /*----ESTO ES PARA LOGUEAR EN CASO DE REFRESH TOKEN VENCIDO*/
+        if (
+          previousRequest?.sent &&
+          error.config.url !== urlPathModel.REFRESH
+        ) {
+          return logout(dispatch, deleteUserStorage, navigate);
+        }
         /*---este error dsp termina dentro de tareas.logErrorAPI*/
         return Promise.reject(error);
       }
@@ -37,7 +52,7 @@ export const useInterceptorRefreskTkn = () => {
     return () => {
       axiosPOSTLogin.interceptors.response.eject(responseInterceptor);
     };
-  }, [refresh]);
+  }, [refresh, dispatch, deleteUserStorage, navigate]);
 
   return undefined;
 };

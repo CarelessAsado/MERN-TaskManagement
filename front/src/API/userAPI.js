@@ -50,8 +50,8 @@ export const logout = async (dispatch, deleteUserStorage, navigate) => {
     /*---customhook para borrar el local storage*/
     deleteUserStorage();
     setHeadersPostLogin("");
-    window.location.replace("/login");
-    /* navigate("/login"); */
+    /* window.location.replace("/login"); */
+    navigate("/login");
   } catch (error) {
     tareasAPI.logErrorAPI(error, dispatch, "LOGOUT");
   }
