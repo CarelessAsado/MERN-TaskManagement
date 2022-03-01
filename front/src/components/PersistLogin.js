@@ -6,20 +6,19 @@ import { useGlobalContext } from "../Hooks/useGlobalContext";
 
 export const PersistLogin = () => {
   const [loading, setLoading] = useState(true);
-  const { dispatch, user } = useGlobalContext();
+  const { dispatch, user, userLocalStorage } = useGlobalContext();
   console.log("estamos en persist", user);
   useEffect(() => {
     function checkStorage() {
       try {
-        const user = JSON.parse(localStorage.getItem("user"));
         console.log(
-          user,
+          userLocalStorage,
           "USER EN EL PERSIST, previo a chequear si despachamos login o no"
         );
-        if (user) {
+        if (userLocalStorage) {
           /*  actualizar el state dsp */
-          const { accessToken } = user;
-          dispatch({ type: actions.LOGIN, payload: user });
+          const { accessToken } = userLocalStorage;
+          dispatch({ type: actions.LOGIN, payload: userLocalStorage });
           setHeadersPostLogin(accessToken);
           return setLoading(false);
         }
@@ -29,7 +28,7 @@ export const PersistLogin = () => {
       }
     }
     user ? setLoading(false) : checkStorage();
-  }, [dispatch, user]);
+  }, [dispatch, user, userLocalStorage]);
 
   return loading ? <h1>Loading...</h1> : <Outlet />;
 };

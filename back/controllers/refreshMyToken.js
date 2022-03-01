@@ -2,7 +2,6 @@ const jwt = require("jsonwebtoken");
 const { expirationTokens } = require("../models/currentUrl");
 async function refreshMyToken(req, res) {
   const cookies = req.cookies;
-  console.log(req.cookies, "VER SI SE NECESITA TRUE NO SE QUES");
   if (!cookies?.jwtRefreshToken) {
     return res.status(401).json("El refresh token no existe.");
   }
@@ -19,12 +18,10 @@ async function refreshMyToken(req, res) {
       process.env.JWT_REFRESH_SECRET,
       (error, decodedUser) => {
         if (error) {
-          return res.status(403).send("El token no es válido.");
+          /*-------------OJO de no ponerle 403 xq sino hay endless loop*/
+          /*---ver de armar custom property en este error asi puede poner un conditional en el back y distinguirlo, en vez de usar error .status 402*/
+          return res.status(402).json("El REFRESH token no es válido.");
         }
-        console.log(
-          decodedUser,
-          "VER BIEN Q NO HAYA ERRORES CON EL DECODE DEL REFRESH TOKEN"
-        );
         /*----MAGIA JWT--------------*/
         const accessToken = jwt.sign(
           { _id: decodedUser._id },

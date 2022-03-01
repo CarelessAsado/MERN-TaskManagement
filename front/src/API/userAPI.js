@@ -18,7 +18,12 @@ export const registerPost = async (usuario, dispatch, navigate, setSuccess) => {
   }
 };
 
-export const loginPost = async (usuario, dispatch, navigate) => {
+export const loginPost = async (
+  usuario,
+  dispatch,
+  navigate,
+  setUserLocalStorage
+) => {
   dispatch({ type: actions.START_ACTION });
   try {
     const { data } = await axiosPRELogin.post(url + "/login", usuario, {
@@ -28,8 +33,8 @@ export const loginPost = async (usuario, dispatch, navigate) => {
     const { accessToken } = data;
 
     dispatch({ type: actions.LOGIN, payload: data });
-    /*-------------ver si pongo useEffect pal local storage*/
-    localStorage.setItem("user", JSON.stringify(data));
+    /*-------------custom hook pal local storage*/
+    setUserLocalStorage(data);
     setHeadersPostLogin(accessToken);
     navigate("/");
   } catch (error) {
@@ -37,15 +42,16 @@ export const loginPost = async (usuario, dispatch, navigate) => {
   }
 };
 /*-------------------ACA YA USO AXIOS INSTANCE POSTLOGIN--------*/
-export const logout = async (dispatch, navigate) => {
+export const logout = async (dispatch, deleteUserStorage, navigate) => {
   try {
     dispatch({ type: actions.START_ACTION });
     await axiosPOSTLogin.get(url + "/logout");
     dispatch({ type: actions.LOGOUT });
-    /*---ver de usar useEffect para el local storage*/
-    localStorage.removeItem("user");
+    /*---customhook para borrar el local storage*/
+    deleteUserStorage();
     setHeadersPostLogin("");
-    navigate("/login");
+    window.location.replace("/login");
+    /* navigate("/login"); */
   } catch (error) {
     tareasAPI.logErrorAPI(error, dispatch, "LOGOUT");
   }

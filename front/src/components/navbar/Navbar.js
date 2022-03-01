@@ -7,12 +7,12 @@ import { logout } from "../../API/userAPI";
 
 const Navbar = () => {
   const [showMenu, setShowMenu] = useState(false);
-  const { user, dispatch } = useGlobalContext();
+  const { user, dispatch, deleteUserStorage } = useGlobalContext();
   const navigate = useNavigate();
 
   function logoutProcess() {
     setShowMenu(!showMenu);
-    logout(dispatch, navigate);
+    logout(dispatch, deleteUserStorage, navigate);
   }
   return (
     <nav>

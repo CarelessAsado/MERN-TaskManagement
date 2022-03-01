@@ -1,13 +1,23 @@
 import axios from "./url";
 import { actions } from "../Context/reducer";
+import { logout } from "./userAPI";
+
 const url = "tareas";
 export const tareasAPI = {
-  logErrorAPI: function (error, dispatch, etapa) {
+  logErrorAPI: async function (error, dispatch, etapa) {
     console.log(
       error?.response?.data,
       JSON.stringify(error),
       "hubo un error estamos el logERROR API. Sector: " + etapa
     );
+    if (error?.config?.sent) {
+      console.log(
+        "aca es un error de refresh token AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+        error.config
+      );
+      /*---------ESTO NO ANDA AHORA XQ REQUIRE DEU N CUSTOM HOOK*/
+      return logout(dispatch);
+    }
     if (
       error.message === "Network Error" ||
       error.message === "Failed to fetch"

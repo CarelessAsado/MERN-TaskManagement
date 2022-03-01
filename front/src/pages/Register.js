@@ -11,7 +11,7 @@ export const RegisterOrLogin = () => {
   const [nombre, setNombre] = useState("");
   const [success, setSuccess] = useState("");
   /*---------------------------------------*/
-  const { dispatch, error } = useGlobalContext();
+  const { dispatch, error, setUserLocalStorage } = useGlobalContext();
   /*----------------REDIRECT------------------------------*/
   let navigate = useNavigate();
   /*-----------------------REGISTER-----------------------*/
@@ -44,7 +44,12 @@ export const RegisterOrLogin = () => {
         payload: "No puede haber campos vacíos.",
       });
     }
-    loginPost({ emailUsuario, contraseña }, dispatch, navigate);
+    loginPost(
+      { emailUsuario, contraseña },
+      dispatch,
+      navigate,
+      setUserLocalStorage
+    );
   }
   return (
     <form
