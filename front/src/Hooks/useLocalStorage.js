@@ -17,10 +17,5 @@ export const useLocalStorage = (key, defaultValue) => {
       console.log(error, "error custom hook useLocalStorage");
     }
   }
-  function deleteLocalStorage() {
-    localStorage.removeItem(key);
-    setItemStored(defaultValue);
-    console.log("borramos local storage en useLocal");
-  }
-  return [itemStored, saveLocalStorage, deleteLocalStorage];
+  return [itemStored, saveLocalStorage];
 };

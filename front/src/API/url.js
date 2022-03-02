@@ -21,3 +21,4 @@ export function setHeadersPostLogin(accessToken) {
   axiosPOSTLogin.defaults.headers[headersAccessTokenString] = accessToken; //en caso de Logout paso empty string
 }
 /*-------------------------------------------------------------*/
+export const keyStorage = "user";

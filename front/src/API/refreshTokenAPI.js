@@ -14,7 +14,7 @@ export const refreshTokenAPI = {
     } catch (error) {
       /*---devuelvo el error al interceptor, asi dsp se llama al logErrorAPI con la original call, no la del interceptor*/
       return error;
-      /*       tareasAPI.logErrorAPI(
+      /*       errorHandler(
         error,
         dispatch,
         "REFRESH TOKEN IF ACCESS TOKEN EXPIRED"

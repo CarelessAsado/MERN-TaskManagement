@@ -4,7 +4,6 @@ import axiosPOSTLogin, {
   headersAccessTokenString,
   urlPathModel,
 } from "../API/url";
-import { logout } from "../API/userAPI";
 import { useGlobalContext } from "./useGlobalContext";
 import { useRefreshAPI } from "./useRefreshAPI";
 
@@ -38,14 +37,14 @@ export const useInterceptorRefreskTkn = () => {
           }
           return axiosPOSTLogin(previousRequest);
         }
-        /*----ESTO ES PARA LOGUEAR EN CASO DE REFRESH TOKEN VENCIDO*/
-        if (
+        /*----ESTO ERA PARA LOGUEAR EN CASO DE REFRESH TOKEN VENCIDO, al final preferí devolver el error al errorHandler y redirigir ahi*/
+        /*         if (
           previousRequest?.sent &&
           error.config.url !== urlPathModel.REFRESH
         ) {
-          return logout(dispatch, deleteUserStorage, navigate, errorHandler);
-        }
-        /*---este error dsp termina dentro de tareas.logErrorAPI*/
+          return logout(dispatch);
+        } */
+        /*---este error dsp termina dentro del errorHandler*/
         return Promise.reject(error);
       }
     );

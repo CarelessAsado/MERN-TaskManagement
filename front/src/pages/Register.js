@@ -12,8 +12,7 @@ export const RegisterOrLogin = () => {
   const [nombre, setNombre] = useState("");
   const [success, setSuccess] = useState("");
   /*---------------------------------------*/
-  const { dispatch, error, setUserLocalStorage, errorHandler } =
-    useGlobalContext();
+  const { dispatch, error, setUserLocalStorage } = useGlobalContext();
   /*----------------REDIRECT------------------------------*/
   let navigate = useNavigate();
   /*-----------------------REGISTER-----------------------*/
@@ -36,7 +35,7 @@ export const RegisterOrLogin = () => {
       },
       navigate,
       setSuccess,
-      errorHandler
+      dispatch
     );
   }
   /*--------------------------------HACER LOGIN-----------------------------------------------------*/
@@ -50,13 +49,7 @@ export const RegisterOrLogin = () => {
         payload: "No puede haber campos vacíos.",
       });
     }
-    await loginPost(
-      { email, pwd },
-      dispatch,
-      navigate,
-      setUserLocalStorage,
-      errorHandler
-    );
+    loginPost({ email, pwd }, dispatch, navigate, setUserLocalStorage);
   }
   return (
     <form

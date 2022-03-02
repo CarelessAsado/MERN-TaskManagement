@@ -1,35 +1,12 @@
 import axios from "./url";
 import { actions } from "../Context/reducer";
+import { errorHandler } from "./errorHandler";
 
 const url = "tareas";
 export const tareasAPI = {
-  logErrorAPI: async function (error, dispatch, etapa) {
-    console.log(
-      error?.response?.data,
-      JSON.stringify(error),
-      "hubo un error estamos el logERROR API. Sector: " + etapa
-    );
-    /*     if (error?.config?.sent) {
-      console.log(
-        "aca es un error de refresh token AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-        error.config
-      );
-      ESTO NO ANDA AHORA XQ REQUIRE DEU N CUSTOM HOOK
-      return logout(dispatch);
-    } */
-    if (
-      error.message === "Network Error" ||
-      error.message === "Failed to fetch"
-    ) {
-      return dispatch({
-        type: actions.FAILURE_ACTION,
-        payload: "Hubo un problema en la conexión.",
-      });
-    }
-    dispatch({ type: actions.FAILURE_ACTION, payload: error?.response?.data });
-  },
-  fetchTareasTodas: async function (dispatch, errorHandler) {
+  fetchTareasTodas: async function (dispatch) {
     try {
+      console.log("estamos en fetch all", dispatch);
       let { data } = await axios.get(url);
       let dataPayload = data.map((item) => {
         return {
@@ -41,7 +18,7 @@ export const tareasAPI = {
       dispatch({ type: actions.FETCH, payload: dataPayload });
       return dataPayload;
     } catch (error) {
-      errorHandler(error, "FETCH ALL TASKS");
+      await errorHandler(error, dispatch, "FETCH ALL TASKS");
     }
   },
   /*---------------------------------DELETEEEEE--------------*/
@@ -52,7 +29,7 @@ export const tareasAPI = {
       dispatch({ type: actions.REMOVE, payload: id });
       return;
     } catch (error) {
-      this.logErrorAPI(error, dispatch, "BORRAR TAREA");
+      errorHandler(error, dispatch, "BORRAR TAREA");
     }
   },
   guardarTareaPost: async function (input, dispatch) {
@@ -64,7 +41,7 @@ export const tareasAPI = {
       dispatch({ type: actions.ADD, payload: { id, descripcion, completada } });
       return;
     } catch (error) {
-      this.logErrorAPI(error, dispatch, "GUARDAR TAREA");
+      errorHandler(error, dispatch, "GUARDAR TAREA");
     }
   },
   actualizarTarea: async function (id, itemAActualizar, dispatch) {
@@ -78,7 +55,7 @@ export const tareasAPI = {
       dispatch({ type: actions.UPDATE, payload: { ...itemAActualizar, id } });
       return;
     } catch (error) {
-      this.logErrorAPI(error, dispatch, "ACTUALIZAR");
+      errorHandler(error, dispatch, "ACTUALIZAR");
     }
   },
 };

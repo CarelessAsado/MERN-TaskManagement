@@ -6,14 +6,15 @@ import { useGlobalContext } from "../Hooks/useGlobalContext";
 import { actions } from "../Context/reducer";
 
 export const TodoForm = () => {
-  const { tasks, dispatch, error, errorHandler } = useGlobalContext();
+  const { tasks, dispatch, error } = useGlobalContext();
   /*/-----------------------------------*/
   const [inputNuevaTarea, setInputNuevaTarea] = useState("");
   /*-------CONEXION DATABASE------------*/
   /*------get tareas ON LOAD*/
+
   useEffect(() => {
     function fetchAPI() {
-      tareasAPI.fetchTareasTodas(dispatch, errorHandler);
+      tareasAPI.fetchTareasTodas(dispatch);
     }
     fetchAPI();
   }, [dispatch]);

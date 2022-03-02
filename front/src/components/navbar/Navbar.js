@@ -1,19 +1,17 @@
 import React, { useState } from "react";
 import { MenuList } from "./MenuLinks";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import "./Navbar.css";
 import { useGlobalContext } from "../../Hooks/useGlobalContext";
 import { logout } from "../../API/userAPI";
 
 const Navbar = () => {
   const [showMenu, setShowMenu] = useState(false);
-  const { user, dispatch, deleteUserStorage, errorHandler } =
-    useGlobalContext();
-  const navigate = useNavigate();
+  const { user, dispatch } = useGlobalContext();
 
   function logoutProcess() {
     setShowMenu(!showMenu);
-    logout(dispatch, deleteUserStorage, navigate, errorHandler);
+    logout(dispatch);
   }
   return (
     <nav>

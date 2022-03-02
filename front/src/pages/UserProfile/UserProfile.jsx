@@ -4,11 +4,11 @@ import { ChangePWD } from "../../components/ChangePWD";
 import { useGlobalContext } from "../../Hooks/useGlobalContext";
 import { userProfileAPI } from "../../API/userProfileAPI";
 export const UserProfile = () => {
-  const { user, dispatch, errorHandler } = useGlobalContext();
+  const { user, dispatch } = useGlobalContext();
   const [showOverlay, setShowOverlay] = useState(false);
   const { nombre = "Usuario", emailUsuario, _id } = user;
   useEffect(() => {
-    userProfileAPI.getUserProfile(_id, dispatch, errorHandler);
+    userProfileAPI.getUserProfile(_id, dispatch);
   }, [_id, dispatch]);
   function changeOverlay() {
     setShowOverlay(!showOverlay);

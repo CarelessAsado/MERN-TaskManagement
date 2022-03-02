@@ -1,24 +1,21 @@
 import { actions } from "../Context/reducer";
+import { errorHandler } from "./errorHandler";
 import axiosPOSTLogin, {
   axiosPRELogin,
+  keyStorage,
   setHeadersPostLogin,
   urlPathModel,
 } from "./url";
 
 const url = urlPathModel.AUTH;
-export const registerPost = async (
-  usuario,
-  navigate,
-  setSuccess,
-  errorHandler
-) => {
+export const registerPost = async (usuario, navigate, setSuccess, dispatch) => {
   try {
     await axiosPRELogin.post(url + "/register", usuario);
     setSuccess("Te registraste exitosamente. Podés iniciar sesión.");
     navigate("/login");
     return;
   } catch (error) {
-    errorHandler(error, "REGISTER");
+    await errorHandler(error, dispatch, "REGISTER");
   }
 };
 
@@ -26,8 +23,7 @@ export const loginPost = async (
   { email, pwd },
   dispatch,
   navigate,
-  setUserLocalStorage,
-  errorHandler
+  setUserLocalStorage
 ) => {
   dispatch({ type: actions.START_ACTION });
   try {
@@ -51,27 +47,22 @@ export const loginPost = async (
     email.current.value = "";
     navigate("/");
   } catch (error) {
-    errorHandler(error, "LOGIN");
+    errorHandler(error, dispatch, "LOGIN");
   }
 };
 /*-------------------ACA YA USO AXIOS INSTANCE POSTLOGIN--------*/
-export const logout = async (
-  dispatch,
-  deleteUserStorage,
-  navigate,
-  errorHandler
-) => {
+export const logout = async (dispatch) => {
   try {
     dispatch({ type: actions.START_ACTION });
-    await axiosPOSTLogin.get(url + "/logout");
-    /*---customhook para borrar el local storage*/
-    deleteUserStorage();
-    console.log("esto tendria q pasar primero, estamos en axios API User");
+    /*---borrar el local storage y headers*/
+    localStorage.removeItem(keyStorage);
     setHeadersPostLogin("");
-    dispatch({ type: actions.LOGOUT });
-    navigate("/login");
+    await axiosPOSTLogin.get(url + "/logout");
   } catch (error) {
-    errorHandler(error, "LOGOUT");
+    console.log(error);
+  } finally {
+    dispatch({ type: actions.LOGOUT });
+    window.location.replace("/login");
   }
 };
 
@@ -80,8 +71,7 @@ export const forgotPasswordSendMeAnEmail = async (
   e,
   emailUsuario,
   dispatch,
-  setSuccess,
-  errorHandler
+  setSuccess
 ) => {
   setSuccess("");
   e.preventDefault();
