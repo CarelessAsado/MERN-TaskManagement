@@ -7,5 +7,4 @@ function errorWrapper(fn) {
     }
   };
 }
-
 module.exports = errorWrapper;

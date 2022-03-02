@@ -28,7 +28,7 @@ export const tareasAPI = {
     }
     dispatch({ type: actions.FAILURE_ACTION, payload: error?.response?.data });
   },
-  fetchTareasTodas: async function (dispatch) {
+  fetchTareasTodas: async function (dispatch, errorHandler) {
     try {
       let { data } = await axios.get(url);
       let dataPayload = data.map((item) => {
@@ -41,7 +41,7 @@ export const tareasAPI = {
       dispatch({ type: actions.FETCH, payload: dataPayload });
       return dataPayload;
     } catch (error) {
-      this.logErrorAPI(error, dispatch, "FETCH ALL TASKS");
+      errorHandler(error, "FETCH ALL TASKS");
     }
   },
   /*---------------------------------DELETEEEEE--------------*/

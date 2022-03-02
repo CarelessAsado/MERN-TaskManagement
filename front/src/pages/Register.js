@@ -4,6 +4,7 @@ import { registerPost, loginPost } from "../API/userAPI";
 import { Link, useNavigate } from "react-router-dom";
 import { useGlobalContext } from "../Hooks/useGlobalContext";
 import { actions } from "../Context/reducer";
+
 export const RegisterOrLogin = () => {
   const email = useRef();
   const pwd = useRef();
@@ -11,7 +12,8 @@ export const RegisterOrLogin = () => {
   const [nombre, setNombre] = useState("");
   const [success, setSuccess] = useState("");
   /*---------------------------------------*/
-  const { dispatch, error, setUserLocalStorage } = useGlobalContext();
+  const { dispatch, error, setUserLocalStorage, errorHandler } =
+    useGlobalContext();
   /*----------------REDIRECT------------------------------*/
   let navigate = useNavigate();
   /*-----------------------REGISTER-----------------------*/
@@ -32,9 +34,9 @@ export const RegisterOrLogin = () => {
         confirmaContraseña,
         nombre,
       },
-      dispatch,
       navigate,
-      setSuccess
+      setSuccess,
+      errorHandler
     );
   }
   /*--------------------------------HACER LOGIN-----------------------------------------------------*/
@@ -48,7 +50,13 @@ export const RegisterOrLogin = () => {
         payload: "No puede haber campos vacíos.",
       });
     }
-    await loginPost({ email, pwd }, dispatch, navigate, setUserLocalStorage);
+    await loginPost(
+      { email, pwd },
+      dispatch,
+      navigate,
+      setUserLocalStorage,
+      errorHandler
+    );
   }
   return (
     <form

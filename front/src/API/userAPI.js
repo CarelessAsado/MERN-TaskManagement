@@ -4,17 +4,21 @@ import axiosPOSTLogin, {
   setHeadersPostLogin,
   urlPathModel,
 } from "./url";
-import { tareasAPI } from "./tareasAPI";
 
 const url = urlPathModel.AUTH;
-export const registerPost = async (usuario, dispatch, navigate, setSuccess) => {
+export const registerPost = async (
+  usuario,
+  navigate,
+  setSuccess,
+  errorHandler
+) => {
   try {
     await axiosPRELogin.post(url + "/register", usuario);
     setSuccess("Te registraste exitosamente. Podés iniciar sesión.");
     navigate("/login");
     return;
   } catch (error) {
-    tareasAPI.logErrorAPI(error, dispatch, "REGISTER");
+    errorHandler(error, "REGISTER");
   }
 };
 
@@ -22,7 +26,8 @@ export const loginPost = async (
   { email, pwd },
   dispatch,
   navigate,
-  setUserLocalStorage
+  setUserLocalStorage,
+  errorHandler
 ) => {
   dispatch({ type: actions.START_ACTION });
   try {
@@ -46,11 +51,16 @@ export const loginPost = async (
     email.current.value = "";
     navigate("/");
   } catch (error) {
-    tareasAPI.logErrorAPI(error, dispatch, "LOGIN");
+    errorHandler(error, "LOGIN");
   }
 };
 /*-------------------ACA YA USO AXIOS INSTANCE POSTLOGIN--------*/
-export const logout = async (dispatch, deleteUserStorage, navigate) => {
+export const logout = async (
+  dispatch,
+  deleteUserStorage,
+  navigate,
+  errorHandler
+) => {
   try {
     dispatch({ type: actions.START_ACTION });
     await axiosPOSTLogin.get(url + "/logout");
@@ -61,7 +71,7 @@ export const logout = async (dispatch, deleteUserStorage, navigate) => {
     dispatch({ type: actions.LOGOUT });
     navigate("/login");
   } catch (error) {
-    tareasAPI.logErrorAPI(error, dispatch, "LOGOUT");
+    errorHandler(error, "LOGOUT");
   }
 };
 
@@ -70,7 +80,8 @@ export const forgotPasswordSendMeAnEmail = async (
   e,
   emailUsuario,
   dispatch,
-  setSuccess
+  setSuccess,
+  errorHandler
 ) => {
   setSuccess("");
   e.preventDefault();
@@ -90,18 +101,15 @@ export const forgotPasswordSendMeAnEmail = async (
     );
     return;
   } catch (error) {
-    tareasAPI.logErrorAPI(
-      error,
-      dispatch,
-      "FORGOT PASSWORD SEND ME AN EMAIL PROCESS"
-    );
+    errorHandler(error, "FORGOT PASSWORD SEND ME AN EMAIL PROCESS");
   }
 };
 export const forgotPasswordCHANGEPWD = async (
   contraseñas,
   dispatch,
   secretLinkId,
-  setSuccess
+  setSuccess,
+  errorHandler
 ) => {
   setSuccess("");
   dispatch({ type: actions.START_ACTION });
@@ -114,10 +122,6 @@ export const forgotPasswordCHANGEPWD = async (
 
     return;
   } catch (error) {
-    tareasAPI.logErrorAPI(
-      error,
-      dispatch,
-      "FORGOT PASSWORD CHANGE PWD FINISHING PROCEDURE"
-    );
+    errorHandler(error, "FORGOT PASSWORD CHANGE PWD FINISHING PROCEDURE");
   }
 };

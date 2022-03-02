@@ -6,11 +6,11 @@ import Navbar from "./components/navbar/Navbar";
 import { ContextProvider } from "./Context/context";
 
 ReactDOM.render(
-  <ContextProvider>
-    <BrowserRouter>
+  <BrowserRouter>
+    <ContextProvider>
       <Navbar></Navbar>
       <App />
-    </BrowserRouter>
-  </ContextProvider>,
+    </ContextProvider>
+  </BrowserRouter>,
   document.getElementById("root")
 );

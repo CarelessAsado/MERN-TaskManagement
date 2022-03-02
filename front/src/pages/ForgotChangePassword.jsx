@@ -6,7 +6,7 @@ import { useGlobalContext } from "../Hooks/useGlobalContext";
 
 export const ForgotChangePassword = () => {
   const { secretLinkId } = useParams();
-  const { dispatch, error } = useGlobalContext();
+  const { dispatch, error, errorHandler } = useGlobalContext();
   const [success, setSuccess] = useState("");
   /*-------------INPUT NEW PWD + PWD2---------------------*/
   const [pwdsUsuario, setPwdsUsuario] = useState({
@@ -27,7 +27,13 @@ export const ForgotChangePassword = () => {
       });
     }
     /*---------------*/
-    forgotPasswordCHANGEPWD(pwdsUsuario, dispatch, secretLinkId, setSuccess);
+    forgotPasswordCHANGEPWD(
+      pwdsUsuario,
+      dispatch,
+      secretLinkId,
+      setSuccess,
+      errorHandler
+    );
   }
   return (
     <form id="forgotPwdForm" onSubmit={handleSubmitNewPwd}>

@@ -19,6 +19,7 @@ function App() {
   /*----------------RESET ERRORS ON NAVIGATION*/
   const location = useLocation();
   const { dispatch } = useGlobalContext();
+
   useEffect(() => {
     dispatch({ type: actions.CLEAR_ERRORS });
   }, [location.pathname, dispatch]);

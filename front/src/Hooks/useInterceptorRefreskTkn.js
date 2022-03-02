@@ -9,7 +9,7 @@ import { useGlobalContext } from "./useGlobalContext";
 import { useRefreshAPI } from "./useRefreshAPI";
 
 export const useInterceptorRefreskTkn = () => {
-  const { dispatch, deleteUserStorage } = useGlobalContext();
+  const { dispatch, deleteUserStorage, errorHandler } = useGlobalContext();
   const navigate = useNavigate();
   const refresh = useRefreshAPI();
   useEffect(() => {
@@ -43,7 +43,7 @@ export const useInterceptorRefreskTkn = () => {
           previousRequest?.sent &&
           error.config.url !== urlPathModel.REFRESH
         ) {
-          return logout(dispatch, deleteUserStorage, navigate);
+          return logout(dispatch, deleteUserStorage, navigate, errorHandler);
         }
         /*---este error dsp termina dentro de tareas.logErrorAPI*/
         return Promise.reject(error);
@@ -52,7 +52,7 @@ export const useInterceptorRefreskTkn = () => {
     return () => {
       axiosPOSTLogin.interceptors.response.eject(responseInterceptor);
     };
-  }, [refresh, dispatch, deleteUserStorage, navigate]);
+  }, [refresh, dispatch, deleteUserStorage, navigate, errorHandler]);
 
   return undefined;
 };
