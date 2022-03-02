@@ -3,7 +3,8 @@ const { ForbiddenError, UnauthorizedError } = require("../ERRORS/CustomError");
 
 function verifyToken(req, res, next) {
   const authHeader = req.headers.auth;
-  console.log(authHeader, req.url);
+
+  console.log("Accesstoken present: ", authHeader.length, req.url);
   if (!authHeader) {
     return next(
       new UnauthorizedError("No estás autorizado. No existe token de acceso.")

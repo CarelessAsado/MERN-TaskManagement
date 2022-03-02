@@ -15,6 +15,7 @@ export const errorHandler = async (error, dispatch, etapa) => {
     );
     return await logout(dispatch);
   }
+  //agregar 401 UNAUTHORIZED
   if (
     error.message === "Network Error" ||
     error.message === "Failed to fetch"

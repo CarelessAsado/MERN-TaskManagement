@@ -6,7 +6,6 @@ const url = "tareas";
 export const tareasAPI = {
   fetchTareasTodas: async function (dispatch) {
     try {
-      console.log("estamos en fetch all", dispatch);
       let { data } = await axios.get(url);
       let dataPayload = data.map((item) => {
         return {
