@@ -19,23 +19,31 @@ export const registerPost = async (usuario, dispatch, navigate, setSuccess) => {
 };
 
 export const loginPost = async (
-  usuario,
+  { email, pwd },
   dispatch,
   navigate,
   setUserLocalStorage
 ) => {
   dispatch({ type: actions.START_ACTION });
   try {
-    const { data } = await axiosPRELogin.post(url + "/login", usuario, {
-      withCredentials: true,
-    });
+    const emailUsuario = email.current.value;
+    const contraseña = pwd.current.value;
+    const { data } = await axiosPRELogin.post(
+      url + "/login",
+      { emailUsuario, contraseña },
+      {
+        withCredentials: true,
+      }
+    );
+    dispatch({ type: actions.LOGIN, payload: data });
     /*-------------PONER TOKEN DINAMICAMENTE--------------*/
     const { accessToken } = data;
-
-    dispatch({ type: actions.LOGIN, payload: data });
+    setHeadersPostLogin(accessToken);
     /*-------------custom hook pal local storage*/
     setUserLocalStorage(data);
-    setHeadersPostLogin(accessToken);
+    /*---Vaciar inputs del submit*/
+    pwd.current.value = "";
+    email.current.value = "";
     navigate("/");
   } catch (error) {
     tareasAPI.logErrorAPI(error, dispatch, "LOGIN");
@@ -46,11 +54,11 @@ export const logout = async (dispatch, deleteUserStorage, navigate) => {
   try {
     dispatch({ type: actions.START_ACTION });
     await axiosPOSTLogin.get(url + "/logout");
-    dispatch({ type: actions.LOGOUT });
     /*---customhook para borrar el local storage*/
     deleteUserStorage();
+    console.log("esto tendria q pasar primero, estamos en axios API User");
     setHeadersPostLogin("");
-    /* window.location.replace("/login"); */
+    dispatch({ type: actions.LOGOUT });
     navigate("/login");
   } catch (error) {
     tareasAPI.logErrorAPI(error, dispatch, "LOGOUT");

@@ -20,6 +20,7 @@ export const useLocalStorage = (key, defaultValue) => {
   function deleteLocalStorage() {
     localStorage.removeItem(key);
     setItemStored(defaultValue);
+    console.log("borramos local storage en useLocal");
   }
   return [itemStored, saveLocalStorage, deleteLocalStorage];
 };

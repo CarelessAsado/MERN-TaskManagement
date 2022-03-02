@@ -1,12 +1,12 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import "./Register.css";
 import { registerPost, loginPost } from "../API/userAPI";
 import { Link, useNavigate } from "react-router-dom";
 import { useGlobalContext } from "../Hooks/useGlobalContext";
 import { actions } from "../Context/reducer";
 export const RegisterOrLogin = () => {
-  const [emailUsuario, setEmailUsuario] = useState("");
-  const [contraseña, setContraseña] = useState("");
+  const email = useRef();
+  const pwd = useRef();
   const [confirmaContraseña, setConfirmaContraseña] = useState("");
   const [nombre, setNombre] = useState("");
   const [success, setSuccess] = useState("");
@@ -16,6 +16,8 @@ export const RegisterOrLogin = () => {
   let navigate = useNavigate();
   /*-----------------------REGISTER-----------------------*/
   function handleSubmitRegister(e) {
+    const emailUsuario = email.current.value;
+    const contraseña = pwd.current.value;
     e.preventDefault();
     if (!emailUsuario || !contraseña || !confirmaContraseña || !nombre) {
       return dispatch({
@@ -35,21 +37,18 @@ export const RegisterOrLogin = () => {
       setSuccess
     );
   }
-  /*----------HACER LOGIN---------*/
-  function handleSubmitLogin(e) {
+  /*--------------------------------HACER LOGIN-----------------------------------------------------*/
+  async function handleSubmitLogin(e) {
     e.preventDefault();
+    const contraseña = pwd.current.value;
+    const emailUsuario = email.current.value;
     if (!emailUsuario || !contraseña) {
       return dispatch({
         type: actions.VALIDATION_ERROR,
         payload: "No puede haber campos vacíos.",
       });
     }
-    loginPost(
-      { emailUsuario, contraseña },
-      dispatch,
-      navigate,
-      setUserLocalStorage
-    );
+    await loginPost({ email, pwd }, dispatch, navigate, setUserLocalStorage);
   }
   return (
     <form
@@ -102,10 +101,7 @@ export const RegisterOrLogin = () => {
               ? "Email nuevo usuario"
               : "Email"
           }
-          value={emailUsuario}
-          onChange={(e) => {
-            setEmailUsuario(e.target.value);
-          }}
+          ref={email}
         />
         <label htmlFor="emailUsuario"></label>
       </div>
@@ -114,10 +110,7 @@ export const RegisterOrLogin = () => {
           type="password"
           id="contraseña"
           placeholder="Contraseña"
-          value={contraseña}
-          onChange={(e) => {
-            setContraseña(e.target.value);
-          }}
+          ref={pwd}
         />
         <label htmlFor="contraseña"></label>
       </div>
