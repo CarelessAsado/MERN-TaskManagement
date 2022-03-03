@@ -34,7 +34,7 @@ function verifyEmailLink(req, res, next) {
     if (err) {
       return next(
         new ForbiddenError(
-          "El link no es válido. No se puede llevar a cabo el cambio de contraseña."
+          "El link no es válido o expiró. No se puede llevar a cabo el cambio de contraseña."
         )
       );
     }

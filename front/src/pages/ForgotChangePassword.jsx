@@ -6,7 +6,7 @@ import { useGlobalContext } from "../Hooks/useGlobalContext";
 
 export const ForgotChangePassword = () => {
   const { secretLinkId } = useParams();
-  const { dispatch, error, errorHandler } = useGlobalContext();
+  const { dispatch, error } = useGlobalContext();
   const [success, setSuccess] = useState("");
   /*-------------INPUT NEW PWD + PWD2---------------------*/
   const [pwdsUsuario, setPwdsUsuario] = useState({
@@ -18,7 +18,7 @@ export const ForgotChangePassword = () => {
     setPwdsUsuario({ ...pwdsUsuario, [name]: e.target.value });
   }
   /*--------------------------------------------------*/
-  async function handleSubmitNewPwd(e) {
+  function handleSubmitNewPwd(e) {
     e.preventDefault();
     if (!pwdsUsuario.contraseña || !pwdsUsuario.confirmaContraseña) {
       return dispatch({
@@ -27,13 +27,7 @@ export const ForgotChangePassword = () => {
       });
     }
     /*---------------*/
-    forgotPasswordCHANGEPWD(
-      pwdsUsuario,
-      dispatch,
-      secretLinkId,
-      setSuccess,
-      errorHandler
-    );
+    forgotPasswordCHANGEPWD(pwdsUsuario, dispatch, secretLinkId, setSuccess);
   }
   return (
     <form id="forgotPwdForm" onSubmit={handleSubmitNewPwd}>

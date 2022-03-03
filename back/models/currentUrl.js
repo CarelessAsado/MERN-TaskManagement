@@ -6,4 +6,8 @@ module.exports.urlAuthAPI = "/api/users/auth";
 module.exports.urlTareasAPI = "/api/tareas";
 module.exports.urlUserProfileAPI = "/api/user/profile";
 module.exports.urlRefreshMyToken = "/api/refresh";
-module.exports.expirationTokens = { access: "10s", refresh: "9d" };
+module.exports.expirationTokens = {
+  access: "10m",
+  refresh: "1d",
+  emailToken: "30m",
+};

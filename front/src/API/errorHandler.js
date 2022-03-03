@@ -3,6 +3,7 @@ import { logout } from "./userAPI";
 
 export const errorHandler = async (error, dispatch, etapa) => {
   //logout:DELETEUSESTORAGE,navigate,
+  console.log(error, etapa);
   console.log(
     error?.response?.data,
     JSON.stringify(error),

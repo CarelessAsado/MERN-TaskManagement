@@ -91,15 +91,14 @@ export const forgotPasswordSendMeAnEmail = async (
     );
     return;
   } catch (error) {
-    errorHandler(error, "FORGOT PASSWORD SEND ME AN EMAIL PROCESS");
+    errorHandler(error, dispatch, "FORGOT PASSWORD SEND ME AN EMAIL PROCESS");
   }
 };
 export const forgotPasswordCHANGEPWD = async (
   contraseñas,
   dispatch,
   secretLinkId,
-  setSuccess,
-  errorHandler
+  setSuccess
 ) => {
   setSuccess("");
   dispatch({ type: actions.START_ACTION });
@@ -112,6 +111,11 @@ export const forgotPasswordCHANGEPWD = async (
 
     return;
   } catch (error) {
-    errorHandler(error, "FORGOT PASSWORD CHANGE PWD FINISHING PROCEDURE");
+    console.log(error, "holaaaaaa");
+    await errorHandler(
+      error,
+      dispatch,
+      "FORGOT PASSWORD CHANGE PWD FINISHING PROCEDURE"
+    );
   }
 };

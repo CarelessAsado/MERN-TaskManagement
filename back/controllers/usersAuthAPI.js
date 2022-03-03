@@ -91,7 +91,7 @@ const forgotPassword = errorWrapper(async function (req, res, next) {
     );
   }
   /*----MAGIA JWT--------------*/
-  const secretLinkToken = user.generateAccessToken();
+  const secretLinkToken = user.generateEmailToken();
   await sendEmail(user, secretLinkToken);
   return res
     .status(200)
@@ -109,7 +109,8 @@ const forgotPasswordCreateNew = errorWrapper(async function (req, res, next) {
   /*-----VALIDAR contraseña*/ //********************* */
   const errorString = validateUserInput({ contraseña, confirmaContraseña });
   if (errorString) {
-    return res.status(400).json(errorString);
+    console.log(errorString, "errorString");
+    return next(new CustomError(errorString, 404));
   }
   userToUpdatePwd.contraseña = contraseña;
   await userToUpdatePwd.hashPass();

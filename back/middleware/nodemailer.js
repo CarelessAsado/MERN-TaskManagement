@@ -1,5 +1,9 @@
 const nodemailer = require("nodemailer");
-const { currentUrl, urlAuthAPI } = require("../models/currentUrl");
+const {
+  currentUrl,
+  urlAuthAPI,
+  expirationTokens,
+} = require("../models/currentUrl");
 
 async function sendEmail(user, secretLinkToken) {
   const { emailUsuario, nombre = "usuario" } = user;
@@ -20,9 +24,12 @@ async function sendEmail(user, secretLinkToken) {
   /*-------------------ESTA PARTE SE PUEDE AGREGAR DINAMICAMENTE
   A la funcion .sendMail se le puede agregar un CB si no querés usar promises*/
   try {
+    /*----------ESTA URL es Client side/ REACT----*/
     const goldenLink =
-      /*----------CREO Q ESTA URL TENDRIA Q SER EL FRONT EN REACT----*/
       currentUrl + "/forgot-password/" + secretLinkToken + "/changePassword";
+    /*-----Tiempo q tarda en expirar el link*/
+    let expiresIn = expirationTokens.emailToken.match(/[0-9]/g).join("");
+
     let info = await transporter.sendMail({
       from: `"Rodrigo López" <${process.env.NODEMAIL}>`, // sender address
       to: emailUsuario, // MAIL DINAMICO
@@ -31,7 +38,10 @@ async function sendEmail(user, secretLinkToken) {
       html:
         "<b>Hola " +
         nombre +
-        '</b><div>Presioná en el link de a continuación para proseguir con el cambio de contraseña.</div><a href=" ' +
+        ":" +
+        "</b><div>El siguiente link va a expirar en " +
+        expiresIn +
+        ' minutos.</div><div>Presioná el link de a continuación para proseguir con el cambio de contraseña.</div><a href=" ' +
         goldenLink +
         '" target="_blank" rel="noopener noreferrer">' +
         goldenLink +

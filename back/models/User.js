@@ -38,6 +38,11 @@ User.methods.generateAccessToken = function () {
     expiresIn: expirationTokens.access,
   });
 };
+User.methods.generateEmailToken = function () {
+  return jwt.sign({ _id: this._id }, process.env.JWT_SECRET, {
+    expiresIn: expirationTokens.emailToken,
+  });
+};
 User.methods.generateRefreshToken = function () {
   return jwt.sign({ _id: this._id }, process.env.JWT_REFRESH_SECRET, {
     expiresIn: expirationTokens.refresh,

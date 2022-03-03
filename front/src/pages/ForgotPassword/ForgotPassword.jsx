@@ -4,7 +4,7 @@ import { actions } from "../../Context/reducer";
 import { useGlobalContext } from "../../Hooks/useGlobalContext";
 import "./ForgotPassword.css";
 export const ForgotPassword = () => {
-  const { dispatch, error, errorHandler } = useGlobalContext();
+  const { dispatch, error } = useGlobalContext();
   const [emailUsuario, setEmailUsuario] = useState("");
   const [success, setSuccess] = useState("");
   return (
@@ -12,13 +12,7 @@ export const ForgotPassword = () => {
       <form
         id="forgotPwdForm"
         onSubmit={(e) =>
-          forgotPasswordSendMeAnEmail(
-            e,
-            emailUsuario,
-            dispatch,
-            setSuccess,
-            errorHandler
-          )
+          forgotPasswordSendMeAnEmail(e, emailUsuario, dispatch, setSuccess)
         }
       >
         <h2>Te olvidaste tu contraseña?</h2>
