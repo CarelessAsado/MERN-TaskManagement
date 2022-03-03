@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const { TareaSchema } = require("./tareas");
+const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { expirationTokens } = require("./currentUrl");
 
@@ -31,7 +32,7 @@ const User = new mongoose.Schema(
   },
   { timestamps: true }
 );
-
+/*-------------------GENERATE JWT ACCESS/REFRESH TOKENS---------------------*/
 User.methods.generateAccessToken = function () {
   return jwt.sign({ _id: this._id }, process.env.JWT_SECRET, {
     expiresIn: expirationTokens.access,
@@ -41,6 +42,14 @@ User.methods.generateRefreshToken = function () {
   return jwt.sign({ _id: this._id }, process.env.JWT_REFRESH_SECRET, {
     expiresIn: expirationTokens.refresh,
   });
+};
+/*--------------------BCRYPT COMPARE/HASH PWD-----------------------------------------*/
+User.methods.comparePass = async function (pass) {
+  return await bcrypt.compare(pass, this.contraseña);
+};
+
+User.methods.hashPass = async function () {
+  this.contraseña = await bcrypt.hash(this.contraseña, 10);
 };
 
 module.exports = mongoose.model("User", User);

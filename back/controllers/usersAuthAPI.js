@@ -1,6 +1,5 @@
 //IMPORTAR MODELO
 const User = require("../models/User");
-const { TareaModel: Tarea } = require("../models/tareas");
 //ERROR CLASSES
 const errorWrapper = require("../ERRORS/errorWrapper");
 const {
@@ -9,15 +8,10 @@ const {
   CustomError,
 } = require("../ERRORS/CustomError");
 
-/*---BCRYPT----------*/
-const bcrypt = require("bcrypt");
-/*-----JWT--------------*/
-const jwt = require("jsonwebtoken");
 /*----------------------------*/
 const validateUserInput = require("../middleware/customValidation");
 /*------NODEMAILER---------------*/
 const sendEmail = require("../middleware/nodemailer");
-const { expirationTokens } = require("../models/currentUrl");
 
 const registerUsuario = errorWrapper(async function (req, res, next) {
   const { emailUsuario, contraseña, confirmaContraseña, nombre } = req.body;
@@ -29,13 +23,14 @@ const registerUsuario = errorWrapper(async function (req, res, next) {
   if (errorString) {
     return res.status(400).json(errorString);
   }
+  console.log(req.body);
   /*-----VALIDAR contraseña*/ //********************* */
-  let passHashed = await bcrypt.hash(contraseña, 10);
   let usuarioACrear = new User({
     emailUsuario,
-    contraseña: passHashed,
+    contraseña,
     nombre,
   });
+  await usuarioACrear.hashPass();
   const nuevoUsuario = await usuarioACrear.save();
   res.status(201).json(nuevoUsuario);
 });
@@ -60,7 +55,7 @@ const loginUsuario = errorWrapper(async function (req, res, next) {
     return next(new UnauthorizedError("Usuario o contraseña no coinciden."));
   }
 
-  if (await bcrypt.compare(contraseña, user.contraseña)) {
+  if (await user.comparePass(contraseña)) {
     /*----MAGIA JWT--------------*/
     const accessToken = user.generateAccessToken();
     const refreshToken = user.generateRefreshToken();
@@ -96,9 +91,7 @@ const forgotPassword = errorWrapper(async function (req, res, next) {
     );
   }
   /*----MAGIA JWT--------------*/
-  const secretLinkToken = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
-    expiresIn: 86400,
-  }); //CAMBIAR EL EXPIRATION TIME
+  const secretLinkToken = user.generateAccessToken();
   await sendEmail(user, secretLinkToken);
   return res
     .status(200)
@@ -118,8 +111,8 @@ const forgotPasswordCreateNew = errorWrapper(async function (req, res, next) {
   if (errorString) {
     return res.status(400).json(errorString);
   }
-  let passHashed = await bcrypt.hash(contraseña, 10);
-  userToUpdatePwd.contraseña = passHashed;
+  userToUpdatePwd.contraseña = contraseña;
+  await userToUpdatePwd.hashPass();
   const nuevoUsuario = await userToUpdatePwd.save();
   return res.status(201).json("Se realizó el cambio exitosamente.");
 });
