@@ -62,16 +62,9 @@ const loginUsuario = errorWrapper(async function (req, res, next) {
 
   if (await bcrypt.compare(contraseña, user.contraseña)) {
     /*----MAGIA JWT--------------*/
-    const accessToken = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: expirationTokens.access,
-    });
-    const refreshToken = jwt.sign(
-      { _id: user._id },
-      process.env.JWT_REFRESH_SECRET,
-      {
-        expiresIn: expirationTokens.refresh,
-      }
-    );
+    const accessToken = user.generateAccessToken();
+    const refreshToken = user.generateRefreshToken();
+
     /*----Creo q hay q borrar la cookie al loguear out*/
     res.cookie("jwtRefreshToken", refreshToken, {
       httpOnly: true,

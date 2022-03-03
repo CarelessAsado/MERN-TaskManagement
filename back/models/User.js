@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 const { TareaSchema } = require("./tareas");
+const jwt = require("jsonwebtoken");
+const { expirationTokens } = require("./currentUrl");
 
 const User = new mongoose.Schema(
   {
@@ -29,5 +31,16 @@ const User = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+User.methods.generateAccessToken = function () {
+  return jwt.sign({ _id: this._id }, process.env.JWT_SECRET, {
+    expiresIn: expirationTokens.access,
+  });
+};
+User.methods.generateRefreshToken = function () {
+  return jwt.sign({ _id: this._id }, process.env.JWT_REFRESH_SECRET, {
+    expiresIn: expirationTokens.refresh,
+  });
+};
 
 module.exports = mongoose.model("User", User);
