@@ -4,7 +4,7 @@ import { actions } from "../../Context/reducer";
 import { useGlobalContext } from "../../Hooks/useGlobalContext";
 import "./ForgotPassword.css";
 export const ForgotPassword = () => {
-  const { dispatch, error } = useGlobalContext();
+  const { dispatch, error, loading } = useGlobalContext();
   const [emailUsuario, setEmailUsuario] = useState("");
   const [success, setSuccess] = useState("");
   return (
@@ -40,7 +40,11 @@ export const ForgotPassword = () => {
           placeholder="Email *"
         />
 
-        <input type="submit" value="Enviar" />
+        <input
+          type="submit"
+          disabled={loading}
+          value={loading ? "Cargando..." : "Enviar"}
+        />
         <div className="info">
           Te vamos a enviar un mail. Seguí los pasos ahí indicados y vas a poder
           recuperar tu cuenta.
