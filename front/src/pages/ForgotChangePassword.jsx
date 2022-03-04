@@ -6,7 +6,7 @@ import { useGlobalContext } from "../Hooks/useGlobalContext";
 
 export const ForgotChangePassword = () => {
   const { secretLinkId } = useParams();
-  const { dispatch, error } = useGlobalContext();
+  const { dispatch, error, loading } = useGlobalContext();
   const [success, setSuccess] = useState("");
   /*-------------INPUT NEW PWD + PWD2---------------------*/
   const [pwdsUsuario, setPwdsUsuario] = useState({
@@ -64,7 +64,11 @@ export const ForgotChangePassword = () => {
         placeholder="Confirmá tu contraseña *"
       />
 
-      <input type="submit" value="Enviar" />
+      <input
+        type="submit"
+        disabled={loading}
+        value={loading ? "Cargando..." : "Enviar"}
+      />
       <div className="info">
         Último paso! Elegí tu nueva contraseña y ya estas listo para iniciar
         sesión.
