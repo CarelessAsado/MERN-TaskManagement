@@ -34,9 +34,9 @@ const Navbar = () => {
           <>
             <li>
               <Link to={`/profile/${user._id}`}>
-                {!user.nombre || user.nombre.length > 10
+                {!user.nombre || user.nombre.split(" ")[0].length > 10
                   ? "Usuario"
-                  : user.nombre}
+                  : user.nombre.split(" ")[0]}
               </Link>
             </li>
             {MenuList.hayUser.map((item, index) => {
