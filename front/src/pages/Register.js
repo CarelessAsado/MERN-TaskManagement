@@ -12,7 +12,7 @@ export const RegisterOrLogin = () => {
   const [nombre, setNombre] = useState("");
   const [success, setSuccess] = useState("");
   /*---------------------------------------*/
-  const { dispatch, error, setUserLocalStorage } = useGlobalContext();
+  const { dispatch, error, setUserLocalStorage, loading } = useGlobalContext();
   /*----------------REDIRECT------------------------------*/
   let navigate = useNavigate();
   /*-----------------------REGISTER-----------------------*/
@@ -131,9 +131,12 @@ export const RegisterOrLogin = () => {
       )}
 
       <input
+        disabled={loading}
         type="submit"
         value={
-          window.location.pathname === "/register"
+          loading
+            ? "Cargando..."
+            : window.location.pathname === "/register"
             ? "Registrarse"
             : "Iniciar sesión"
         }
