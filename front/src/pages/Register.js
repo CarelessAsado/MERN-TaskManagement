@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import "./Register.css";
 import { registerPost, loginPost } from "../API/userAPI";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useGlobalContext } from "../Hooks/useGlobalContext";
 import { actions } from "../Context/reducer";
 
@@ -11,7 +11,9 @@ export const RegisterOrLogin = () => {
   const [confirmaContraseña, setConfirmaContraseña] = useState("");
   const [nombre, setNombre] = useState("");
   const [success, setSuccess] = useState("");
-  /*---------------------------------------*/
+  /*-----------------------------------------------*/
+  const { pathname } = useLocation();
+  /*-----------------------------------------------------*/
   const { dispatch, error, setUserLocalStorage, loading } = useGlobalContext();
   /*----------------REDIRECT------------------------------*/
   let navigate = useNavigate();
@@ -54,17 +56,11 @@ export const RegisterOrLogin = () => {
   return (
     <form
       onSubmit={
-        window.location.pathname === "/register"
-          ? handleSubmitRegister
-          : handleSubmitLogin
+        pathname === "/register" ? handleSubmitRegister : handleSubmitLogin
       }
     >
       <header>
-        <h2>
-          {window.location.pathname === "/register"
-            ? "Registrate"
-            : "Iniciá sesión"}
-        </h2>
+        <h2>{pathname === "/register" ? "Registrate" : "Iniciá sesión"}</h2>
       </header>
       {error && (
         <div className="errorContainer">
@@ -81,7 +77,7 @@ export const RegisterOrLogin = () => {
           <i className="fas fa-times" onClick={() => setSuccess("")}></i>
         </div>
       )}
-      {window.location.pathname === "/register" && (
+      {pathname === "/register" && (
         <div className="formControl">
           <label htmlFor="nombre"></label>
           <input
@@ -98,9 +94,7 @@ export const RegisterOrLogin = () => {
           type="text"
           id="emailUsuario"
           placeholder={
-            window.location.pathname === "/register"
-              ? "Email nuevo usuario"
-              : "Email"
+            pathname === "/register" ? "Email nuevo usuario" : "Email"
           }
           ref={email}
         />
@@ -115,7 +109,7 @@ export const RegisterOrLogin = () => {
         />
         <label htmlFor="contraseña"></label>
       </div>
-      {window.location.pathname === "/register" && (
+      {pathname === "/register" && (
         <div className="formControl">
           <input
             type="password"
@@ -136,22 +130,18 @@ export const RegisterOrLogin = () => {
         value={
           loading
             ? "Cargando..."
-            : window.location.pathname === "/register"
+            : pathname === "/register"
             ? "Registrarse"
             : "Iniciar sesión"
         }
       />
       <div className="marginLine"></div>
-      <Link
-        to={window.location.pathname === "/register" ? "/login" : "/register"}
-      >
+      <Link to={pathname === "/register" ? "/login" : "/register"}>
         <button className="redirect">
-          {window.location.pathname === "/register"
-            ? "Iniciar sesión"
-            : "Crear cuenta nueva"}
+          {pathname === "/register" ? "Iniciar sesión" : "Crear cuenta nueva"}
         </button>
       </Link>
-      {window.location.pathname === "/login" && (
+      {pathname === "/login" && (
         <Link to="/forgot-password">
           <div>Me olvidé la contraseña</div>
         </Link>
